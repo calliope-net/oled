@@ -1,1 +1,1 @@
-basic.showIcon(IconNames.SmallSquare)
+basic.showIcon(IconNames.Happy)
