@@ -9,7 +9,9 @@
         "main.ts",
         "README.md",
         "oledpaint.ts",
-        "oledco2.ts"
+        "oledco2.ts",
+        "oledclass.ts",
+        "oledarrays.ts"
     ],
     "testFiles": [
         "test.ts"

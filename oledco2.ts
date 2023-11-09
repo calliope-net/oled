@@ -3,7 +3,7 @@
  * LCD chip SSD1306
  * angepasst an Calliope mini und erweitert von M.Klein 26.05.22-03.06.22
  **/
-//% weight=79 color=#00A654 icon="\uf26c" block="CO2 OLED"
+//% weight=27 color=#00A654 icon="\uf26c" block="oledco2"
 
 namespace CO2OLED {
 
