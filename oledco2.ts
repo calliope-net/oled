@@ -8,7 +8,7 @@
 namespace CO2OLED {
 
     //Screen buffers for sending data to the display
-    let screenBuf = pins.createBuffer(1025);
+    let screenBuf = pins.createBuffer(240); //1025
     let ackBuf = pins.createBuffer(2);
     let writeOneByteBuf = pins.createBuffer(2);
     let writeTwoByteBuf = pins.createBuffer(3);

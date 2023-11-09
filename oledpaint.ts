@@ -3,7 +3,7 @@
  * LCD chip SSD1306
  * angepasst an Calliope mini und erweitert von M.Klein 6.5.21-12.5.21
  **/
-//% weight=28 color=#00A654 icon="\uf26c" block="oledpaint"
+//% weight=100 color=#00A654 icon="\uf26c" block="128x64 Display"
 //% groups='["Control", "Show", "Draw", "Delete"]'
 namespace kitronik_VIEW128x64 {
     let font: number[] = [];
@@ -39,7 +39,7 @@ namespace kitronik_VIEW128x64 {
     font[29] = 0x0022d422;
     font[30] = 0x0022d422;
     font[31] = 0x0022d422;
-    font[32] = 0x00000000;
+/*    font[32] = 0x00000000;
     font[33] = 0x000002e0;
     font[34] = 0x00018060;
     font[35] = 0x00afabea;
@@ -135,7 +135,7 @@ namespace kitronik_VIEW128x64 {
     font[125] = 0x000013f1;
     font[126] = 0x00841080;
     font[127] = 0x0022d422;
-
+ */
 
     /**
      * Select the alignment of text
@@ -165,7 +165,7 @@ namespace kitronik_VIEW128x64 {
     }
 
     //Screen buffers for sending data to the display
-    let screenBuf = pins.createBuffer(1025);
+    let screenBuf = pins.createBuffer(240); //1025
     let ackBuf = pins.createBuffer(2);
     let writeOneByteBuf = pins.createBuffer(2);
     let writeTwoByteBuf = pins.createBuffer(3);
