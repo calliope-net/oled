@@ -3,7 +3,7 @@
  * LCD chip SSD1306
  * angepasst an Calliope mini und erweitert von M.Klein 6.5.21-12.5.21
  **/
-//% weight=100 color=#00A654 icon="\uf26c" block="128x64 Display"
+//% weight=28 color=#00A654 icon="\uf26c" block="oledpaint"
 //% groups='["Control", "Show", "Draw", "Delete"]'
 namespace kitronik_VIEW128x64 {
     let font: number[] = [];
