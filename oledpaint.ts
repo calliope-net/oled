@@ -7,7 +7,7 @@ Weiterentwicklung der Idee von M.Klein:
 
 neu programmiert von Lutz Elßner im November 2023
 */ {
-
+/* 
     //% group="OLED Display 0.96 (32 KB RAM ab Calliope 2.x)" subcategory=zeichnen
     //% block="i2c %pADDR || invert %pInvert flip %pFlip i2c-Check %ck EEPROM: Zeichen 8x8 %pEEPROM_Startadresse Zeichen 5x5 %pEEPROM_Startadresse_5x5 i2c %pEEPROM_i2cADDR"
     //% weight=4
@@ -107,5 +107,5 @@ neu programmiert von Lutz Elßner im November 2023
         }
 
     }
-
+ */
 }
