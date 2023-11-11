@@ -9,7 +9,6 @@
         "main.ts",
         "README.md",
         "oledpaint.ts",
-        "oledco2.ts",
         "oledclass.ts",
         "oledarrays.ts",
         "pxt-OLEDpaint.ts",
