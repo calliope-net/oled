@@ -5,6 +5,19 @@ input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
     OLEDpaint.writeSegment(3, 60, z)
     OLEDpaint.sendBuffer()
 })
+input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
+    OLEDpaint.writeImageOLED(oledssd1315.matrix8x8(`
+        . . . . . . . .
+        . . . . # # . .
+        . . # . . . . .
+        . . # . . . . .
+        . . . # . . . .
+        . . . . . . . .
+        # # . . . . # .
+        . . . . . . . #
+        `), 0, 0)
+    OLEDpaint.sendBuffer()
+})
 input.onButtonEvent(Button.A, ButtonEvent.Hold, function () {
     OLEDpaint.writeSegment(0, 0, 84)
     OLEDpaint.sendBuffer()

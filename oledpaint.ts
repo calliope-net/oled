@@ -95,10 +95,25 @@ neu programmiert von Lutz Elßner im November 2023
             let page = y >> 3                                // 64/8 = 0..7
             let bu: Buffer = this.qBuffer.get(page)
             let shift_page = y % 8                           //calculate the page to write to
-            let ind = x + page * 128 + 1                     //calculate which register in the page to write to.
-            let screenPixel = (bu[ind] | (1 << shift_page))  //set the screen data byte
-            bu[ind] = screenPixel                            //store data in screen buffer
+            //let ind = x + page * 128 + 1                     //calculate which register in the page to write to.
+            let seg = this.qOffset + x
+            let screenPixel = (bu[seg] | (1 << shift_page))  //set the screen data byte
+            bu[seg] = screenPixel                            //store data in screen buffer
         }
+
+
+        //% group="Image" subcategory=zeichnen
+        //% block="schreiben %OLEDpaint Matrix %im x %xpos y %ypos" weight=8
+        writeImageOLED(im: Image, xpos: number, ypos: number) {
+            for (let y = 0; y <= im.height() - 1; y++) {
+                for (let x = 0; x <= im.width() - 1; x++) {
+                    if ((im.pixel(x, y) ? 1 : 0)) {
+                        this.setPixelbuffer(x + xpos, y + ypos)
+                    }
+                }
+            }
+        }
+
 
 
 
