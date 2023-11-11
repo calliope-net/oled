@@ -26,7 +26,7 @@ neu programmiert von Lutz Elßner im November 2023
         const im = <Image><any>i;
         return im
     }
-     
+
     //% imageLiteral=1 imageLiteralColumns=6 imageLiteralRows=24
     //% shim=images::createImage
     export function matrix6x24(i: string): Image {
@@ -41,8 +41,7 @@ neu programmiert von Lutz Elßner im November 2023
         return im
     }
 
-
-    let quer = matrix22x6(`
+    export let quer = matrix22x6(`
         . . # # # # # # # # # # # # # # # # # # . .
         . # # # # # # # # # # # # # # # # # # # # .
         # # # # # # # # # # # # # # # # # # # # # #
@@ -51,7 +50,7 @@ neu programmiert von Lutz Elßner im November 2023
         . . # # # # # # # # # # # # # # # # # # . .
         `)
 
-    let hoch = matrix6x24(`
+    export let hoch = matrix6x24(`
     . . # # . .
     . # # # # .
     # # # # # #

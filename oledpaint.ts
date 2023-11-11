@@ -114,7 +114,171 @@ neu programmiert von Lutz Elßner im November 2023
             }
         }
 
+        //% group="Image" subcategory=zeichnen
+        //% block="zeichne %OLEDpaint Segment %seg an Position %pos" weight=7
+        drawsegment(seg: string, pos: number) {
+            switch (seg) {
+                case "A": {
+                    this.writeImageOLED(quer, pos + 4, 0)
+                    break
+                }
+                case "F": {
+                    this.writeImageOLED(hoch, pos, 4)
+                    break
+                }
+                case "E": {
+                    this.writeImageOLED(hoch, pos, 29)
+                    break
+                }
+                case "G": {
+                    this.writeImageOLED(quer, pos + 4, 25)
+                    break
+                }
+                case "B": {
+                    this.writeImageOLED(hoch, pos + 24, 4)
+                    break
+                }
+                case "C": {
+                    this.writeImageOLED(hoch, pos + 24, 29)
+                    break
+                }
+                case "D": {
+                    this.writeImageOLED(quer, pos + 4, 50)
+                    break
+                }
+            }
+        }
 
+
+        //% group="Image" subcategory=zeichnen
+        //% block="zeichne %OLEDpaint Ziffer %num an Position %pos" weight=6
+        drawnum(num: number, pos: number) {
+            switch (pos) {
+                case 0: {
+                    pos = 0
+                    break
+                }
+                case 1: {
+                    pos = 32
+                    break
+                }
+                case 2: {
+                    pos = 64
+                    break
+                }
+                case 3: {
+                    pos = 96
+                    break
+                }
+            }
+            switch (num) {
+                case 0: {
+                    this.drawsegment("A", pos)
+                    this.drawsegment("B", pos)
+                    this.drawsegment("C", pos)
+                    this.drawsegment("D", pos)
+                    this.drawsegment("E", pos)
+                    this.drawsegment("F", pos)
+                    break
+                }
+                case 1: {
+                    this.drawsegment("B", pos)
+                    this.drawsegment("C", pos)
+                    break
+                }
+                case 2: {
+                    this.drawsegment("A", pos)
+                    this.drawsegment("B", pos)
+                    this.drawsegment("G", pos)
+                    this.drawsegment("E", pos)
+                    this.drawsegment("D", pos)
+                    break
+                }
+                case 3: {
+                    this.drawsegment("A", pos)
+                    this.drawsegment("B", pos)
+                    this.drawsegment("C", pos)
+                    this.drawsegment("D", pos)
+                    this.drawsegment("G", pos)
+                    break
+                }
+                case 4: {
+                    this.drawsegment("B", pos)
+                    this.drawsegment("C", pos)
+                    this.drawsegment("F", pos)
+                    this.drawsegment("G", pos)
+                    break
+                }
+                case 5: {
+                    this.drawsegment("A", pos)
+                    this.drawsegment("C", pos)
+                    this.drawsegment("D", pos)
+                    this.drawsegment("F", pos)
+                    this.drawsegment("G", pos)
+                    break
+                }
+                case 6: {
+                    this.drawsegment("A", pos)
+                    this.drawsegment("C", pos)
+                    this.drawsegment("D", pos)
+                    this.drawsegment("E", pos)
+                    this.drawsegment("F", pos)
+                    this.drawsegment("G", pos)
+                    break
+                }
+                case 7: {
+                    this.drawsegment("A", pos)
+                    this.drawsegment("B", pos)
+                    this.drawsegment("C", pos)
+                    break
+                }
+                case 8: {
+                    this.drawsegment("A", pos)
+                    this.drawsegment("B", pos)
+                    this.drawsegment("C", pos)
+                    this.drawsegment("D", pos)
+                    this.drawsegment("E", pos)
+                    this.drawsegment("F", pos)
+                    this.drawsegment("G", pos)
+                    break
+                }
+                case 9: {
+                    this.drawsegment("A", pos)
+                    this.drawsegment("B", pos)
+                    this.drawsegment("C", pos)
+                    this.drawsegment("D", pos)
+                    this.drawsegment("F", pos)
+                    this.drawsegment("G", pos)
+                    break
+                }
+            }
+        }
+
+        //% group="Image" subcategory=zeichnen
+        //% block="zeige %OLEDpaint 7-Segment Zahl %num" weight=5
+        zeigeZahl(num: number) {
+            let zahlAlsText = ""
+            //screenBuf.fill(0)       //Puffer löschen
+            //screenBuf[0] = 0x40
+            //set_pos()               // auf Start setzen
+            if (num < 10000 && num >= 0) {
+                zahlAlsText = convertToText(num)
+                for (let Index = 0; Index <= zahlAlsText.length - 1; Index++) {
+                    this.drawnum(parseFloat(zahlAlsText.substr(Index, 1)), Index + 4 - zahlAlsText.length)
+                }
+            } else { //Errormessage
+                this.drawsegment("A", 0)
+                this.drawsegment("D", 0)
+                this.drawsegment("E", 0)
+                this.drawsegment("F", 0)
+                this.drawsegment("G", 0)
+                this.drawsegment("E", 32)
+                this.drawsegment("G", 32)
+                this.drawsegment("E", 64)
+                this.drawsegment("G", 64)
+            }
+            this.sendBuffer() //Puffer anzeigen
+        }
 
 
         // ========== group="Display"
