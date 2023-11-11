@@ -65,7 +65,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
             this.i2cError_EEPROM = 0 // Reset Fehlercode
 
             this.init(pInvert, pFlip)
-            this.getPixel8Byte(0x20)  // testet, ob EEPROM angeschlossen ist
+            //this.getPixel8Byte(0x20)  // testet, ob EEPROM angeschlossen ist
         }
 
 
@@ -179,7 +179,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% charcode.min=0 charcode.max=255 charcode.defl=0
         //% inlineInputMode=inline
         clearScreen(vonZeile?: number, bisZeile?: number, charcode?: number) {
-            if (this.between(vonZeile, 0, 7) && this.between(bisZeile, 0, 7)) {
+            if (between(vonZeile, 0, 7) && between(bisZeile, 0, 7)) {
                 let bu = Buffer.create(135)
                 let offset = this.setCursorBuffer6(bu, 0, 0, 0)
                 bu.setUint8(offset++, eCONTROL.x40_Data) // CONTROL+DisplayData
@@ -207,7 +207,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         writeText16x8(row: number, col: number, end: number, pText: any, pAlign?: eAlign) {
             let text: string = convertToText(pText)
             let len: number = end - col + 1
-            if (this.between(row, 0, 7) && this.between(col, 0, 15) && this.between(len, 0, 16)) {
+            if (between(row, 0, 7) && between(col, 0, 15) && between(len, 0, 16)) {
 
                 if (text.length > len)
                     text = text.substr(0, len)
@@ -228,7 +228,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% block="16x8 %OLED16x8 Cursor Zeile %row von %col" weight=6
         //% row.min=0 row.max=7 col.min=0 col.max=15
         setCursor(row: number, col: number) {
-            if (this.between(row, 0, 7) && this.between(col, 0, 15)) {
+            if (between(row, 0, 7) && between(col, 0, 15)) {
                 let bu = Buffer.create(6)
                 this.setCursorBuffer6(bu, 0, row, col)
                 this.i2cWriteBuffer_OLED(bu)
@@ -257,11 +257,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         writeText8x16(row: number, col: number, end: number, pText: any, pAlign?: eAlign) {
             let text: string = convertToText(pText)
             let len: number = end - col + 1
-            if (this.between(row, 0, 15) && this.between(col, 0, 7) && this.between(len, 0, 8)) {
-
-                //if (text.length >= len) text = text.substr(0, len)
-                //else if (text.length < len && pAlign == eAlign.rechts) { text = "        ".substr(0, len - text.length) + text }
-                //else /* if (text.length < len && pAlign == eAlign.links) */ { text = text + "        ".substr(0, len - text.length) }
+            if (between(row, 0, 15) && between(col, 0, 7) && between(len, 0, 8)) {
 
                 if (text.length > len)
                     text = text.substr(0, len)
@@ -298,7 +294,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% bisZeile.min=0 bisZeile.max=7 bisZeile.defl=7
         //% inlineInputMode=inline
         fillScreen(pEEPROM_Startadresse: number, vonZeile?: number, bisZeile?: number) {
-            if (this.between(vonZeile, 0, 7) && this.between(bisZeile, 0, 7)) {
+            if (between(vonZeile, 0, 7) && between(bisZeile, 0, 7)) {
                 let buEEPROM = Buffer.create(2)
 
                 let buDisplay = Buffer.create(135)
@@ -315,13 +311,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
                     this.i2cWriteBuffer_EEPROM(buEEPROM)
 
                     buDisplay.write(7, this.i2cReadBuffer_EEPROM(128))
-                    /* 
-                    for (let charCode = 0; charCode <= 15; charCode++) {
-                        // schreibt 16 Zeichen je 8 Pixel in den Buffer(7-135)
-                        buDisplay.write(offsetDisplay, getPixel8ByteEEPROM(pADDR, page * 16 + charCode, eDrehen.nicht))
-                        offsetDisplay += 8
-                    } 
-                    */
+                   
                     this.i2cWriteBuffer_OLED(buDisplay)
                 }
             }
@@ -365,7 +355,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
         // ========== private
 
-        protected between(i0: number, i1: number, i2: number): boolean { return (i0 >= i1 && i0 <= i2) }
+        //protected between(i0: number, i1: number, i2: number): boolean { return (i0 >= i1 && i0 <= i2) }
 
         protected setCursorBuffer6(bu: Buffer, offset: number, row: number, col: number) {
             // schreibt in den Buffer ab offset 6 Byte (CONTROL und Command für setCursor)
@@ -402,23 +392,14 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
                 return drehen(this.i2cReadBuffer_EEPROM(8), this.qZeichenDrehen)
             } else {
                 // wenn kein EEPROM angeschlossen, Zeichencode aus Array laden
-                return drehen(getPixel8ByteArray(pCharCode), this.qZeichenDrehen)
+                return Buffer.fromUTF8("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF")
+                //return drehen(getPixel8ByteArray(pCharCode), this.qZeichenDrehen)
             }
         }
 
 
 
         // ========== private i2cWriteBuffer i2cReadBuffer
-
-        protected i2cWriteBuffer_OLED(buf: Buffer, repeat: boolean = false) {
-            if (this.i2cError_OLED == 0) { // vorher kein Fehler
-                this.i2cError_OLED = pins.i2cWriteBuffer(this.i2cADDR_OLED, buf, repeat)
-                if (this.i2cCheck && this.i2cError_OLED != 0)  // vorher kein Fehler, wenn (n_i2cCheck=true): beim 1. Fehler anzeigen
-                    basic.showString(Buffer.fromArray([this.i2cADDR_OLED]).toHex()) // zeige fehlerhafte i2c-Adresse als HEX
-            } else if (!this.i2cCheck)  // vorher Fehler, aber ignorieren (n_i2cCheck=false): i2c weiter versuchen
-                this.i2cError_OLED = pins.i2cWriteBuffer(this.i2cADDR_OLED, buf, repeat)
-            //else { } // n_i2cCheck=true und n_i2cError != 0: weitere i2c Aufrufe blockieren
-        }
 
         private i2cWriteBuffer_EEPROM(buf: Buffer, repeat: boolean = false) {
             if (this.i2cError_EEPROM == 0) { // vorher kein Fehler
@@ -434,6 +415,17 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
                 return pins.i2cReadBuffer(this.i2cADDR_EEPROM, size, repeat)
             else
                 return Buffer.create(size)
+        }
+ 
+
+        protected i2cWriteBuffer_OLED(buf: Buffer, repeat: boolean = false) {
+            if (this.i2cError_OLED == 0) { // vorher kein Fehler
+                this.i2cError_OLED = pins.i2cWriteBuffer(this.i2cADDR_OLED, buf, repeat)
+                if (this.i2cCheck && this.i2cError_OLED != 0)  // vorher kein Fehler, wenn (n_i2cCheck=true): beim 1. Fehler anzeigen
+                    basic.showString(Buffer.fromArray([this.i2cADDR_OLED]).toHex()) // zeige fehlerhafte i2c-Adresse als HEX
+            } else if (!this.i2cCheck)  // vorher Fehler, aber ignorieren (n_i2cCheck=false): i2c weiter versuchen
+                this.i2cError_OLED = pins.i2cWriteBuffer(this.i2cADDR_OLED, buf, repeat)
+            //else { } // n_i2cCheck=true und n_i2cError != 0: weitere i2c Aufrufe blockieren
         }
 
     } // class oledclass
@@ -453,6 +445,8 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
             r = text.charAt(j) + r
         return r
     }
+
+    export function between(i0: number, i1: number, i2: number): boolean { return (i0 >= i1 && i0 <= i2) }
 
 
     function drehen(b0: Buffer, pDrehen: eZeichenDrehen) { // Buffer mit 8 Byte

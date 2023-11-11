@@ -1,13 +1,15 @@
 
 namespace oledssd1315 {
 
-    let x20: string[], x30: string[], x40: string[], x50: string[], x60: string[], x70: string[]
+    //let x20: string[], x30: string[], x40: string[], x50: string[], x60: string[], x70: string[]
 
     // group="Zeichensatz aus Arrays laden"
     // block="Arrays laden - Zeichencodes | aus calliope-net/oled-eeprom | 20-2F %p20 30-3F %p30 40-4F %p40 50-5F %p50 60-6F %p60 70-7F %p70" subcategory="Arrays"
-    /* export function ladeArrays(p20: string[], p30: string[], p40: string[], p50: string[], p60: string[], p70: string[]) {
+    /*  export function ladeArrays(p20: string[], p30: string[], p40: string[], p50: string[], p60: string[], p70: string[]) {
         x20 = p20; x30 = p30; x40 = p40; x50 = p50; x60 = p60; x70 = p70
-    } */
+    }  */
+
+
 
     export function getPixel8ByteArray(pCharCode: number) {
         let charCodeArray: string[]
@@ -27,7 +29,7 @@ namespace oledssd1315 {
             return Buffer.fromUTF8("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF")
     }
 
-    /* 
+
         const x20: string[] = [
             "\x00\x00\x00\x00\x00\x00\x00\x00", // " "
             "\x00\x00\x5F\x00\x00\x00\x00\x00", // "!"
@@ -150,7 +152,7 @@ namespace oledssd1315 {
             "\x00\x14\x3E\x55\x55\x55\x14\x00", // "€"
             "\x00\x02\x05\x02\x00\x00\x00\x00"  // "°"
         ];
-     */
+     
 
 
 } // oledarrays.ts

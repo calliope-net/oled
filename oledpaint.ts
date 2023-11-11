@@ -7,7 +7,7 @@ Weiterentwicklung der Idee von M.Klein:
 
 neu programmiert von Lutz Elßner im November 2023
 */ {
-/* 
+
     //% group="OLED Display 0.96 (32 KB RAM ab Calliope 2.x)" subcategory=zeichnen
     //% block="i2c %pADDR || invert %pInvert flip %pFlip i2c-Check %ck EEPROM: Zeichen 8x8 %pEEPROM_Startadresse Zeichen 5x5 %pEEPROM_Startadresse_5x5 i2c %pEEPROM_i2cADDR"
     //% weight=4
@@ -51,7 +51,7 @@ neu programmiert von Lutz Elßner im November 2023
 
         //% group="OLED Display 0.96 (32 KB RAM ab Calliope 2.x)" subcategory=zeichnen
         //% block="%OLEDpaint" weight=6
-        //% blockSetVariable=OLED16x8 weight=4
+        //% blockSetVariable=OLED16x8 weight=2
         return_oledclass(): oledclass { return this }
 
 
@@ -69,7 +69,7 @@ neu programmiert von Lutz Elßner im November 2023
         //% block="zeichnen %OLEDpaint Zeile 0↓7 %page Segment 0→127 %seg Bitmuster 0↓255 %byte" weight=4
         //% byte.min=0 byte.max=255 byte.defl=0
         writeSegment(page: number, seg: number, byte: number) {
-            if (this.between(page, 0, 7) && this.between(seg, 0, 127) && this.between(byte, 0, 255)) {
+            if (between(page, 0, 7) && between(seg, 0, 127) && between(byte, 0, 255)) {
                 this.qBuffer.get(page).setUint8(this.qOffset + seg, byte)
             }
         }
@@ -77,7 +77,7 @@ neu programmiert von Lutz Elßner im November 2023
         //% group="Buffer" subcategory=zeichnen
         //% block="lesen %OLEDpaint Zeile 0↓7 %page Segment 0→127 %seg " weight=2
         readSegment(page: number, seg: number) {
-            if (this.between(page, 0, 7) && this.between(seg, 0, 127))
+            if (between(page, 0, 7) && between(seg, 0, 127))
                 return this.qBuffer.get(page).getUint8(this.qOffset + seg)
             else
                 return 0
@@ -92,7 +92,7 @@ neu programmiert von Lutz Elßner im November 2023
         clearScreen1(byte?: number) {
             super.clearScreen(0, 7, byte)
         }
-
+ 
         //% group="Display" subcategory=zeichnen
         //% block="Display %OLEDpaint Buffer anzeigen" weight=2
         sendBuffer() {
@@ -107,5 +107,5 @@ neu programmiert von Lutz Elßner im November 2023
         }
 
     }
- */
+
 }
