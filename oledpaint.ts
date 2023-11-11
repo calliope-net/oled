@@ -10,6 +10,7 @@ neu programmiert von Lutz Elßner im November 2023
 
     //% group="OLED Display 0.96 (32 KB RAM ab Calliope 2.x)" subcategory=zeichnen
     //% block="i2c %pADDR || invert %pInvert flip %pFlip i2c-Check %ck EEPROM: Zeichen 8x8 %pEEPROM_Startadresse Zeichen 5x5 %pEEPROM_Startadresse_5x5 i2c %pEEPROM_i2cADDR"
+    //% weight=4
     //% pADDR.shadow="oledssd1315_eADDR"
     //% pInvert.shadow="toggleOnOff"
     //% pFlip.shadow="toggleOnOff"
@@ -32,7 +33,7 @@ neu programmiert von Lutz Elßner im November 2023
     // ========== class oledpaint extends oledclass
 
     export class oledpaint extends oledclass {
-        private readonly qOffset = 6 // Anzahl der Bytes zur Cursor Positionierung vor den Daten
+        private readonly qOffset = 7 // 6 Bytes zur Cursor Positionierung vor den Daten + 1 Byte 0x40 Display Data
         private readonly qBuffer: Buffer[] // Array von 8 Buffern je (qOffset + 128) Byte
 
         constructor(pADDR: number, pInvert: boolean, pFlip: boolean, ck: boolean,
@@ -48,21 +49,29 @@ neu programmiert von Lutz Elßner im November 2023
             ]
         }
 
+        //% group="OLED Display 0.96 (32 KB RAM ab Calliope 2.x)" subcategory=zeichnen
+        //% block="%OLEDpaint" weight=6
+        //% blockSetVariable=OLED16x8 weight=4
+        return_oledclass(): oledclass { return this }
+
+
+        // ========== group="Buffer"
+
         //% group="Buffer" subcategory=zeichnen
         //% block="löschen %OLEDpaint || mit Bitmuster 0↓255 %byte" weight=6
         //% byte.min=0 byte.max=255 byte.defl=0
         clearBuffer(byte?: number) {
             for (let page = 0; page < this.qBuffer.length; page++)
-                this.qBuffer.get(page).fill(byte & 0xFF, this.qOffset)
+                this.qBuffer.get(page).fill(byte)// & 0xFF, this.qOffset)
         }
 
         //% group="Buffer" subcategory=zeichnen
         //% block="zeichnen %OLEDpaint Zeile 0↓7 %page Segment 0→127 %seg Bitmuster 0↓255 %byte" weight=4
         //% byte.min=0 byte.max=255 byte.defl=0
         writeSegment(page: number, seg: number, byte: number) {
-            /* if (this.between(page, 0, 7) && this.between(seg, 0, 127) && this.between(byte, 0, 255)) {
-                //this.qBuffer.get(page).setUint8(this.qOffset + seg, byte)
-            } */
+            if (this.between(page, 0, 7) && this.between(seg, 0, 127) && this.between(byte, 0, 255)) {
+                this.qBuffer.get(page).setUint8(this.qOffset + seg, byte)
+            }
         }
 
         //% group="Buffer" subcategory=zeichnen
@@ -74,13 +83,26 @@ neu programmiert von Lutz Elßner im November 2023
                 return 0
         }
 
+
+        // ========== group="Display"
+
+        //% group="Display" subcategory=zeichnen
+        //% block="löschen %OLEDpaint || mit Bitmuster 0↓255 %byte" weight=6
+        //% byte.min=0 byte.max=255 byte.defl=0
+        clearScreen1(byte?: number) {
+            super.clearScreen(0, 7, byte)
+        }
+
         //% group="Display" subcategory=zeichnen
         //% block="Display %OLEDpaint Buffer anzeigen" weight=2
         sendBuffer() {
-            for (let page = 0; page < this.qBuffer.length; page++) {
+            let bu: Buffer, offset: number
+            for (let page = 0; page < this.qBuffer.length; page++) {//this.qBuffer.length
+                bu = this.qBuffer.get(page)
                 // setCursorBuffer6 schreibt in den Buffer ab offset 6 Byte (CONTROL und Command für setCursor)
-                this.setCursorBuffer6(this.qBuffer.get(page), 0, page, 0)
-                this.i2cWriteBuffer_OLED(this.qBuffer.get(page))
+                offset = this.setCursorBuffer6(bu, 0, page, 0)
+                bu.setUint8(offset, eCONTROL.x40_Data) // (offset=6) CONTROL Byte 0x40: Display Data
+                this.i2cWriteBuffer_OLED(bu)
             }
         }
 

@@ -2,8 +2,7 @@
     "name": "oled",
     "description": "",
     "dependencies": {
-        "core": "*",
-        "bit": "github:calliope-net/bit#v1.1.0"
+        "core": "*"
     },
     "files": [
         "main.blocks",
@@ -11,8 +10,7 @@
         "README.md",
         "oledpaint.ts",
         "oledclass.ts",
-        "oledarrays.ts",
-        "pxt-CO2OLED.ts"
+        "oledarrays.ts"
     ],
     "testFiles": [
         "test.ts"
@@ -24,21 +22,22 @@
     "supportedTargets": [
         "calliopemini"
     ],
-    "preferredEditor": "blocksprj",
+    "preferredEditor": "tsprj",
     "yotta": {
         "config": {
             "microbit-dal": {
                 "bluetooth": {
+                    "enabled": 0,
                     "pairing_mode": 1,
-                    "partial_flashing": 1,
+                    "partial_flashing": 0,
                     "dfu_service": 1,
-                    "event_service": 1,
+                    "event_service": 0,
                     "device_info_service": 1
                 },
-                "stack_size": 2048,
-                "gatt_table_size": "0x800",
-                "sram_end": "0x20008000",
-                "RAM_SIZE": "\"32K\""
+                "stack_size": 1280,
+                "gatt_table_size": "0x300",
+                "sram_end": "0x20004000",
+                "RAM_SIZE": "\"16K\""
             }
         }
     }
