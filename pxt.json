@@ -2,7 +2,8 @@
     "name": "oled",
     "description": "",
     "dependencies": {
-        "core": "*"
+        "core": "*",
+        "bit": "github:calliope-net/bit#v1.1.0"
     },
     "files": [
         "main.blocks",

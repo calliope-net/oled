@@ -367,7 +367,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
         protected between(i0: number, i1: number, i2: number): boolean { return (i0 >= i1 && i0 <= i2) }
 
-        private setCursorBuffer6(bu: Buffer, offset: number, row: number, col: number) {
+        protected setCursorBuffer6(bu: Buffer, offset: number, row: number, col: number) {
             // schreibt in den Buffer ab offset 6 Byte (CONTROL und Command für setCursor)
             // Buffer muss vorher die richtige Länge haben
             bu.setUint8(offset++, eCONTROL.x80_1Com) // CONTROL+1Command
