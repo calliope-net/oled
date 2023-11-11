@@ -67,6 +67,8 @@ neu programmiert von Lutz Elßner im November 2023
 
         //% group="Buffer" subcategory=zeichnen
         //% block="zeichnen %OLEDpaint Zeile 0↓7 %page Segment 0→127 %seg Bitmuster 0↓255 %byte" weight=4
+        //% page.min=0 page.max=7 page.defl=0
+        //% seg.min=0 seg.max=127 seg.defl=0
         //% byte.min=0 byte.max=255 byte.defl=0
         writeSegment(page: number, seg: number, byte: number) {
             if (between(page, 0, 7) && between(seg, 0, 127) && between(byte, 0, 255)) {
@@ -76,6 +78,8 @@ neu programmiert von Lutz Elßner im November 2023
 
         //% group="Buffer" subcategory=zeichnen
         //% block="lesen %OLEDpaint Zeile 0↓7 %page Segment 0→127 %seg " weight=2
+        //% page.min=0 page.max=7 page.defl=0
+        //% seg.min=0 seg.max=127 seg.defl=0
         readSegment(page: number, seg: number) {
             if (between(page, 0, 7) && between(seg, 0, 127))
                 return this.qBuffer.get(page).getUint8(this.qOffset + seg)
@@ -92,7 +96,7 @@ neu programmiert von Lutz Elßner im November 2023
         clearScreen1(byte?: number) {
             super.clearScreen(0, 7, byte)
         }
- 
+
         //% group="Display" subcategory=zeichnen
         //% block="Display %OLEDpaint Buffer anzeigen" weight=2
         sendBuffer() {

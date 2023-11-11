@@ -2,7 +2,8 @@
     "name": "oled",
     "description": "",
     "dependencies": {
-        "core": "*"
+        "core": "*",
+        "bit": "github:calliope-net/bit#v1.1.0"
     },
     "files": [
         "main.blocks",
@@ -10,7 +11,8 @@
         "README.md",
         "oledclass.ts",
         "oledpaint.ts",
-        "oledarrays.ts"
+        "oledarrays.ts",
+        "oledimage.ts"
     ],
     "testFiles": [
         "test.ts"
@@ -22,7 +24,7 @@
     "supportedTargets": [
         "calliopemini"
     ],
-    "preferredEditor": "blocksprj",
+    "preferredEditor": "tsprj",
     "yotta": {
         "config": {
             "microbit-dal": {
