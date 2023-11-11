@@ -1,7 +1,11 @@
 
 namespace oledssd1315
 /*
+Weiterentwicklung der Idee von M.Klein:
+    https://github.com/MKleinSB/pxt-OLEDpaint
+    "pxt-oledpaint": "github:MKleinSB/pxt-OLEDpaint#v1.2.1",
 
+neu programmiert von Lutz Elßner im November 2023
 */ {
 
     //% group="OLED Display 0.96" subcategory=zeichnen
@@ -29,22 +33,29 @@ namespace oledssd1315
 
     export class oledpaint extends oledclass {
         private readonly qOffset = 5 // Anzahl der Bytes zur Cursor Positionierung vor den Daten
-        private readonly qScreen: Buffer[] // Array von 8 Buffern je (qOffset + 128) Byte
+        private readonly qBuffer: Buffer[] // Array von 8 Buffern je (qOffset + 128) Byte
 
         constructor(pADDR: number, pInvert: boolean, pFlip: boolean, ck: boolean,
             pEEPROM_Startadresse: number, pEEPROM_Startadresse_5x5: number, pEEPROM_i2cADDR: number) {
 
             super(pADDR, pInvert, pFlip, ck, pEEPROM_Startadresse, pEEPROM_i2cADDR)
 
-            this.qScreen = [
+            this.qBuffer = [
                 Buffer.create(this.qOffset + 128), Buffer.create(this.qOffset + 128),
                 Buffer.create(this.qOffset + 128), Buffer.create(this.qOffset + 128),
                 Buffer.create(this.qOffset + 128), Buffer.create(this.qOffset + 128),
                 Buffer.create(this.qOffset + 128), Buffer.create(this.qOffset + 128)
             ]
         }
+
+        //% group="OLED Display 0.96" subcategory=zeichnen
+        //% block="Buffer %OLEDpaint löschen || mit Bitmuster ↓ %byte" weight=2
+        //% byte.min=0 byte.max=255 byte.defl=0
+        clearBuffer(byte?: number) {
+            for (let i = 0; i < this.qBuffer.length; i++)
+                this.qBuffer.get(i).fill(byte & 0xFF)
+        }
+
     }
-
-
 
 }

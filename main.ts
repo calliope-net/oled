@@ -1,2 +1,6 @@
+input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
+    OLEDpaint = oledssd1315.new_oledpaint(oledssd1315.oledssd1315_eADDR(oledssd1315.eADDR.OLED_16x8_x3C))
+    OLEDpaint.clearBuffer(0)
+})
+let OLEDpaint: oledssd1315.oledpaint = null
 basic.showIcon(IconNames.Meh)
-let OLEDpaint = oledssd1315.new_oledpaint(oledssd1315.oledssd1315_eADDR(oledssd1315.eADDR.OLED_16x8_x3C), false, false, true, oledssd1315.oledssd1315_eEEPROM_Startadresse(oledssd1315.eEEPROM_Startadresse.F800), oledssd1315.oledssd1315_eEEPROM_Startadresse(oledssd1315.eEEPROM_Startadresse.F800), oledssd1315.oledssd1315_eADDR_EEPROM(oledssd1315.eADDR_EEPROM.EEPROM_x50))

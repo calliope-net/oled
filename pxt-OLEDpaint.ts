@@ -169,9 +169,9 @@ namespace kitronik_VIEW128x64
 
     //Screen buffers for sending data to the display
     const off = 5
-    let qScreen: Buffer[] = [Buffer.create(off + 128), Buffer.create(off + 128), Buffer.create(off + 128), Buffer.create(off + 128),
+    /* let qScreen: Buffer[] = [Buffer.create(off + 128), Buffer.create(off + 128), Buffer.create(off + 128), Buffer.create(off + 128),
     Buffer.create(off + 128), Buffer.create(off + 128)]
-
+ */
     let screenBuf = pins.createBuffer(240); //1025
     let ackBuf = pins.createBuffer(2);
     let writeOneByteBuf = pins.createBuffer(2);
