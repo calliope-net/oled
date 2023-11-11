@@ -11,7 +11,8 @@
         "oledpaint.ts",
         "oledco2.ts",
         "oledclass.ts",
-        "oledarrays.ts"
+        "oledarrays.ts",
+        "pxt-OLEDpaint.ts"
     ],
     "testFiles": [
         "test.ts"
@@ -28,7 +29,6 @@
         "config": {
             "microbit-dal": {
                 "bluetooth": {
-                    "enabled": 0,
                     "pairing_mode": 1,
                     "partial_flashing": 1,
                     "dfu_service": 1,
