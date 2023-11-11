@@ -12,7 +12,6 @@
         "oledpaint.ts",
         "oledclass.ts",
         "oledarrays.ts",
-        "pxt-OLEDpaint.ts",
         "pxt-CO2OLED.ts"
     ],
     "testFiles": [
@@ -25,7 +24,7 @@
     "supportedTargets": [
         "calliopemini"
     ],
-    "preferredEditor": "tsprj",
+    "preferredEditor": "blocksprj",
     "yotta": {
         "config": {
             "microbit-dal": {

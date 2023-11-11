@@ -32,7 +32,7 @@ neu programmiert von Lutz Elßner im November 2023
     // ========== class oledpaint extends oledclass
 
     export class oledpaint extends oledclass {
-        private readonly qOffset = 5 // Anzahl der Bytes zur Cursor Positionierung vor den Daten
+        private readonly qOffset = 6 // Anzahl der Bytes zur Cursor Positionierung vor den Daten
         private readonly qBuffer: Buffer[] // Array von 8 Buffern je (qOffset + 128) Byte
 
         constructor(pADDR: number, pInvert: boolean, pFlip: boolean, ck: boolean,
@@ -52,29 +52,37 @@ neu programmiert von Lutz Elßner im November 2023
         //% block="löschen %OLEDpaint || mit Bitmuster 0↓255 %byte" weight=6
         //% byte.min=0 byte.max=255 byte.defl=0
         clearBuffer(byte?: number) {
-            for (let i = 0; i < this.qBuffer.length; i++)
-                this.qBuffer.get(i).fill(byte & 0xFF)
+            for (let page = 0; page < this.qBuffer.length; page++)
+                this.qBuffer.get(page).fill(byte & 0xFF, this.qOffset)
         }
 
         //% group="Buffer" subcategory=zeichnen
         //% block="zeichnen %OLEDpaint Zeile 0↓7 %page Segment 0→127 %seg Bitmuster 0↓255 %byte" weight=4
         //% byte.min=0 byte.max=255 byte.defl=0
         writeSegment(page: number, seg: number, byte: number) {
-            if (this.between(page, 0, 7) && this.between(seg, 0, 127) && this.between(byte, 0, 255)) {
-                this.qBuffer.get(page).setUint8(seg, byte)
-            }
+            /* if (this.between(page, 0, 7) && this.between(seg, 0, 127) && this.between(byte, 0, 255)) {
+                //this.qBuffer.get(page).setUint8(this.qOffset + seg, byte)
+            } */
         }
 
         //% group="Buffer" subcategory=zeichnen
         //% block="lesen %OLEDpaint Zeile 0↓7 %page Segment 0→127 %seg " weight=2
         readSegment(page: number, seg: number) {
             if (this.between(page, 0, 7) && this.between(seg, 0, 127))
-                return this.qBuffer.get(page).getUint8(seg)
+                return this.qBuffer.get(page).getUint8(this.qOffset + seg)
             else
                 return 0
         }
 
-
+        //% group="Display" subcategory=zeichnen
+        //% block="Display %OLEDpaint Buffer anzeigen" weight=2
+        sendBuffer() {
+            for (let page = 0; page < this.qBuffer.length; page++) {
+                // setCursorBuffer6 schreibt in den Buffer ab offset 6 Byte (CONTROL und Command für setCursor)
+                this.setCursorBuffer6(this.qBuffer.get(page), 0, page, 0)
+                this.i2cWriteBuffer_OLED(this.qBuffer.get(page))
+            }
+        }
 
     }
 

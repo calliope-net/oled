@@ -410,7 +410,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
         // ========== private i2cWriteBuffer i2cReadBuffer
 
-        private i2cWriteBuffer_OLED(buf: Buffer, repeat: boolean = false) {
+        protected i2cWriteBuffer_OLED(buf: Buffer, repeat: boolean = false) {
             if (this.i2cError_OLED == 0) { // vorher kein Fehler
                 this.i2cError_OLED = pins.i2cWriteBuffer(this.i2cADDR_OLED, buf, repeat)
                 if (this.i2cCheck && this.i2cError_OLED != 0)  // vorher kein Fehler, wenn (n_i2cCheck=true): beim 1. Fehler anzeigen
