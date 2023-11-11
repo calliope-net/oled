@@ -32,9 +32,9 @@
                     "enabled": 0,
                     "pairing_mode": 1,
                     "partial_flashing": 0,
-                    "dfu_service": 1,
+                    "dfu_service": 0,
                     "event_service": 0,
-                    "device_info_service": 1
+                    "device_info_service": 0
                 },
                 "stack_size": 1280,
                 "gatt_table_size": "0x300",
