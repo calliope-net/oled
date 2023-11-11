@@ -4,8 +4,10 @@
  * angepasst an Calliope mini und erweitert von M.Klein 26.05.22-03.06.22
  **/
 //% weight=27 color=#00A654 icon="\uf26c" block="oledco2"
-
-namespace CO2OLED {
+namespace CO2OLED
+/*  https://github.com/mkleinsb/pxt-CO2OLED
+    "pxt-CO2OLED": "github:MKleinSB/pxt-CO2OLED#v0.1.0",
+*/ {
     /* 
         //Screen buffers for sending data to the display
         let screenBuf = pins.createBuffer(240); //1025

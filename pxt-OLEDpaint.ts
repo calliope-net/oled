@@ -5,7 +5,10 @@
  **/
 //% weight=28 color=#00A654 icon="\uf26c" block="oledpaint"
 //% groups='["Control", "Show", "Draw", "Delete"]'
-namespace kitronik_VIEW128x64 {
+namespace kitronik_VIEW128x64
+/*  https://github.com/MKleinSB/pxt-OLEDpaint
+    "pxt-oledpaint": "github:MKleinSB/pxt-OLEDpaint#v1.2.1",
+*/ {
     let font: number[] = [];
     font[0] = 0x0022d422;
     font[1] = 0x0022d422;
