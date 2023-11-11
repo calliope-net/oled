@@ -87,11 +87,25 @@ neu programmiert von Lutz Elßner im November 2023
                 return 0
         }
 
+        //% group="Buffer" subcategory=zeichnen
+        //% block="schreiben %OLEDpaint Pixel an x %x y %y" weight=1
+        //% x.min=0, x.max=127
+        //% y.min=0, y.max=63
+        setPixelbuffer(x: number, y: number) {
+            let page = y >> 3                                // 64/8 = 0..7
+            let bu: Buffer = this.qBuffer.get(page)
+            let shift_page = y % 8                           //calculate the page to write to
+            let ind = x + page * 128 + 1                     //calculate which register in the page to write to.
+            let screenPixel = (bu[ind] | (1 << shift_page))  //set the screen data byte
+            bu[ind] = screenPixel                            //store data in screen buffer
+        }
+
+
 
         // ========== group="Display"
 
         //% group="Display" subcategory=zeichnen
-        //% block="löschen %OLEDpaint || mit Bitmuster 0↓255 %byte" weight=6
+        //% block="super löschen %OLEDpaint || mit Bitmuster 0↓255 %byte" weight=6
         //% byte.min=0 byte.max=255 byte.defl=0
         clearScreen1(byte?: number) {
             super.clearScreen(0, 7, byte)
