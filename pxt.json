@@ -12,7 +12,8 @@
         "oledco2.ts",
         "oledclass.ts",
         "oledarrays.ts",
-        "pxt-OLEDpaint.ts"
+        "pxt-OLEDpaint.ts",
+        "pxt-CO2OLED.ts"
     ],
     "testFiles": [
         "test.ts"
