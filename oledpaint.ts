@@ -50,8 +50,8 @@ neu programmiert von Lutz Elßner im November 2023
         }
 
         //% group="OLED Display 0.96 (32 KB RAM ab Calliope 2.x)" subcategory=zeichnen
-        //% block="%OLEDpaint" weight=6
-        //% blockSetVariable=OLED16x8 weight=2
+        //% block="OLED16x8 %OLEDpaint" weight=2
+        //% blockSetVariable=OLED16x8 
         return_oledclass(): oledclass { return this }
 
 

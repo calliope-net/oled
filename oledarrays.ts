@@ -1,7 +1,7 @@
 
 namespace oledssd1315 {
 
-    //let x20: string[], x30: string[], x40: string[], x50: string[], x60: string[], x70: string[]
+    let x20: string[], x30: string[], x40: string[], x50: string[], x60: string[], x70: string[]
 
     // group="Zeichensatz aus Arrays laden"
     // block="Arrays laden - Zeichencodes | aus calliope-net/oled-eeprom | 20-2F %p20 30-3F %p30 40-4F %p40 50-5F %p50 60-6F %p60 70-7F %p70" subcategory="Arrays"
@@ -29,7 +29,7 @@ namespace oledssd1315 {
             return Buffer.fromUTF8("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF")
     }
 
-
+/* 
         const x20: string[] = [
             "\x00\x00\x00\x00\x00\x00\x00\x00", // " "
             "\x00\x00\x5F\x00\x00\x00\x00\x00", // "!"
@@ -138,9 +138,9 @@ namespace oledssd1315 {
             "\x00\x02\x01\x01\x02\x01\x00\x00", // "~"
             "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF"  // 127
         ]
-    
+     */
         //const basicFont: string[] = [];
-    
+    /* 
         const extendedCharacters: string[] = [
             "\x00\x7D\x0A\x09\x0A\x7D\x00\x00", // "Ä"
             "\x00\x3D\x42\x41\x42\x3D\x00\x00", // "Ö"
@@ -152,7 +152,7 @@ namespace oledssd1315 {
             "\x00\x14\x3E\x55\x55\x55\x14\x00", // "€"
             "\x00\x02\x05\x02\x00\x00\x00\x00"  // "°"
         ];
-     
+      */
 
 
 } // oledarrays.ts

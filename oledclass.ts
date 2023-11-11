@@ -151,7 +151,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
             bu.setUint8(offset++, eCONTROL.x40_Data) // CONTROL+DisplayData
             bu.fill(0x00, offset++, 128)
-
+ 
             for (let page = 0; page <= 7; page++) {
                 bu.setUint8(1, 0xB0 | page) // an offset=1 steht die page number (Zeile 0-7)
                 // sendet den selben Buffer 8 Mal mit Änderung an 1 Byte
