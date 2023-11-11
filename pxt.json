@@ -9,6 +9,7 @@
         "main.ts",
         "README.md",
         "oledclass.ts",
+        "oledpaint.ts",
         "oledarrays.ts"
     ],
     "testFiles": [
