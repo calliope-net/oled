@@ -6,7 +6,7 @@
 //% weight=27 color=#00A654 icon="\uf26c" block="oledco2"
 
 namespace CO2OLED {
-
+/* 
     //Screen buffers for sending data to the display
     let screenBuf = pins.createBuffer(240); //1025
     let ackBuf = pins.createBuffer(2);
@@ -497,5 +497,5 @@ namespace CO2OLED {
         set_pos()
         pins.i2cWriteBuffer(displayAddress, screenBuf)
     }
-
+ */
 }

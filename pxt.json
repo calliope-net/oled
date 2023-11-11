@@ -23,5 +23,23 @@
     "supportedTargets": [
         "calliopemini"
     ],
-    "preferredEditor": "blocksprj"
+    "preferredEditor": "tsprj",
+    "yotta": {
+        "config": {
+            "microbit-dal": {
+                "bluetooth": {
+                    "enabled": 0,
+                    "pairing_mode": 1,
+                    "partial_flashing": 1,
+                    "dfu_service": 1,
+                    "event_service": 1,
+                    "device_info_service": 1
+                },
+                "stack_size": 2048,
+                "gatt_table_size": "0x800",
+                "sram_end": "0x20008000",
+                "RAM_SIZE": "\"32K\""
+            }
+        }
+    }
 }
