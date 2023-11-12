@@ -105,7 +105,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
             if (between(row, 0, 7) && between(col, 0, 15)) {
                 let bu = Buffer.create(6)
                 this.setCursorBuffer6(bu, 0, row, col)
-                this.i2cWriteBuffer_OLED(bu)
+                this.i2cWriteBuffer(bu)
                 control.waitMicros(50)
             }
         }
@@ -149,7 +149,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
                     bu.setUint8(1, 0xB0 | (7 - (col + j)) & 0x07)      // page number 7-0 B7-B0
                     bu.write(8, this.getPixel_8x8(text.charCodeAt(j)))
 
-                    this.i2cWriteBuffer_OLED(bu)
+                    this.i2cWriteBuffer(bu)
                 }
                 control.waitMicros(50)
             }
@@ -177,7 +177,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
                     bu.setUint8(1, 0xB0 | page) // an offset=1 steht die page number (Zeile 0-7)
                     // sendet den selben Buffer 8 Mal mit Änderung an 1 Byte
                     // true gibt den i2c Bus dazwischen nicht für andere Geräte frei
-                    this.i2cWriteBuffer_OLED(bu, page < bisZeile) // Clear Screen
+                    this.i2cWriteBuffer(bu, page < bisZeile) // Clear Screen
                 }
                 control.waitMicros(100000) // 100ms Delay Recommended
             }
@@ -251,7 +251,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
             //bu.setUint8(offset++, 0xAF)  // Set display ON
 
-            this.i2cWriteBuffer_OLED(bu) // nur 1 Buffer wird gesendet
+            this.i2cWriteBuffer(bu) // nur 1 Buffer wird gesendet
 
 
             bu = Buffer.create(135)
@@ -273,14 +273,14 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
                 bu.setUint8(1, 0xB0 | page) // an offset=1 steht die page number (Zeile 0-7)
                 // sendet den selben Buffer 8 Mal mit Änderung an 1 Byte
                 // true gibt den i2c Bus dazwischen nicht für andere Geräte frei
-                this.i2cWriteBuffer_OLED(bu, true) // Clear Screen
+                this.i2cWriteBuffer(bu, true) // Clear Screen
             }
 
             // Set display ON
             bu = Buffer.create(2)
             bu.setUint8(0, eCONTROL.x80_1Com) // CONTROL+1Command
             bu.setUint8(1, 0xAF) // Set display ON
-            this.i2cWriteBuffer_OLED(bu)
+            this.i2cWriteBuffer(bu)
 
             control.waitMicros(100000) // 100ms Delay Recommended
         }
@@ -364,7 +364,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
                     buDisplay.write(7, this.qOLEDeeprom.read(pEEPROM_Startadresse + page * 128, 128))
 
-                    this.i2cWriteBuffer_OLED(buDisplay)
+                    this.i2cWriteBuffer(buDisplay)
                 }
             }
         }
@@ -385,7 +385,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
                 case eDisplayCommand.REMAP: { bu.setUint8(1, (pON ? eCommand.C0_COM_SCAN_INC : eCommand.C8_COM_SCAN_DEC)); break; }
                 case eDisplayCommand.ENTIRE_ON: { bu.setUint8(1, (pON ? eCommand.A4_ENTIRE_DISPLAY_ON : eCommand.A5_RAM_CONTENT_DISPLAY)); break; }
             }
-            this.i2cWriteBuffer_OLED(bu)
+            this.i2cWriteBuffer(bu)
         }
 
         //% group="Display Command" advanced=true
@@ -431,7 +431,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
                 bu.write(offset, this.getPixel_8x8(pText.charCodeAt(j)))
                 offset += 8
             }
-            this.i2cWriteBuffer_OLED(bu)
+            this.i2cWriteBuffer(bu)
             control.waitMicros(50)
         }
 
@@ -464,27 +464,9 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
 
 
-        // ========== private i2cWriteBuffer i2cReadBuffer
-        /* 
-                private i2cWriteBuffer_EEPROM(buf: Buffer, repeat: boolean = false) {
-                    //if (this.i2cADDR_EEPROM != undefined && this.i2cADDR_EEPROM != eEEPROM_Startadresse.kein_EEPROM)
-                    if (this.i2cError_EEPROM == 0) { // vorher kein Fehler
-                        this.i2cError_EEPROM = pins.i2cWriteBuffer(this.i2cADDR_EEPROM, buf, repeat)
-                        if (this.i2cCheck && this.i2cError_EEPROM != 0)  // vorher kein Fehler, wenn (n_i2cCheck=true): beim 1. Fehler anzeigen
-                            basic.showString(Buffer.fromArray([this.i2cADDR_EEPROM]).toHex()) // zeige fehlerhafte i2c-Adresse als HEX
-                    } else if (!this.i2cCheck)  // vorher Fehler, aber ignorieren (n_i2cCheck=false): i2c weiter versuchen
-                        this.i2cError_EEPROM = pins.i2cWriteBuffer(this.i2cADDR_EEPROM, buf, repeat)
-                }
-        
-                private i2cReadBuffer_EEPROM(size: number, repeat: boolean = false): Buffer {
-                    if (!this.i2cCheck || this.i2cError_EEPROM == 0)
-                        return pins.i2cReadBuffer(this.i2cADDR_EEPROM, size, repeat)
-                    else
-                        return Buffer.create(size)
-                }
-         */
+        // ========== protected i2cWriteBuffer (i2cReadBuffer entfällt beim Display)
 
-        protected i2cWriteBuffer_OLED(buf: Buffer, repeat: boolean = false) {
+        protected i2cWriteBuffer(buf: Buffer, repeat: boolean = false) {
             if (this.i2cError == 0) { // vorher kein Fehler
                 this.i2cError = pins.i2cWriteBuffer(this.i2cADDR, buf, repeat)
                 if (this.i2cCheck && this.i2cError != 0)  // vorher kein Fehler, wenn (n_i2cCheck=true): beim 1. Fehler anzeigen

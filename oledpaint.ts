@@ -292,7 +292,7 @@ neu programmiert von Lutz Elßner im November 2023
                 // setCursorBuffer6 schreibt in den Buffer ab offset 6 Byte (CONTROL und Command für setCursor)
                 offset = this.setCursorBuffer6(bu, 0, page, 0)
                 bu.setUint8(offset, eCONTROL.x40_Data) // (offset=6) CONTROL Byte 0x40: Display Data
-                this.i2cWriteBuffer_OLED(bu)
+                this.i2cWriteBuffer(bu)
             }
         }
 
