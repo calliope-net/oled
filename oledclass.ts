@@ -48,10 +48,10 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         private readonly i2cCheck: boolean // i2c-Check
         private i2cError_OLED: number = 0 // Fehlercode vom letzten WriteBuffer (0 ist kein Fehler)
         // EEPROM
-        private i2cADDR_EEPROM: eADDR_EEPROM //= eADDR_EEPROM.EEPROM_x50
+        private i2cADDR_EEPROM = eADDR_EEPROM.EEPROM_x50
         private i2cError_EEPROM: number = 0
-        private qEEPROM_Startadresse_8x8: number = eEEPROM_Startadresse.kein_EEPROM
-        private qEEPROM_Startadresse_5x5: number = eEEPROM_Startadresse.kein_EEPROM
+        private qEEPROM_Startadresse_8x8 = eEEPROM_Startadresse.F800
+        private qEEPROM_Startadresse_5x5 = eEEPROM_Startadresse.EC00
 
         private qZeichenDrehen: eZeichenDrehen = eZeichenDrehen.nicht
         private qOLEDArrays_8x8: oledarrays_8x8
@@ -180,6 +180,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% p_8x8.shadow="oled_new_oledarrays_8x8"
         set_oledarrays_8x8(p_8x8: oledarrays_8x8) {
             this.qOLEDArrays_8x8 = p_8x8
+            this.qEEPROM_Startadresse_8x8 = eEEPROM_Startadresse.kein_EEPROM
         }
 
         //% group="Zeichensatz einstellen (ohne EEPROM)" subcategory="beim Start"
@@ -187,6 +188,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% p_5x5.shadow="oled_new_oledarrays_5x5"
         set_oledarrays_5x5(p_5x5: oledarrays_5x5) {
             this.qOLEDArrays_5x5 = p_5x5
+            this.qEEPROM_Startadresse_5x5 = eEEPROM_Startadresse.kein_EEPROM
         }
 
 
