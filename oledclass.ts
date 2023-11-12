@@ -428,16 +428,21 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
             control.waitMicros(50)
         }
 
-        private getPixel8Byte(pCharCode: number) {//, pDrehen: eZeichenDrehen
+        private getPixel8Byte(pCharCode: number): Buffer {//, pDrehen: eZeichenDrehen
             if (this.i2cError_EEPROM == 0 && this.qEEPROM_Startadresse_8x8 != eEEPROM_Startadresse.kein_EEPROM) {
                 let bu = Buffer.create(2)
                 bu.setNumber(NumberFormat.UInt16BE, 0, this.qEEPROM_Startadresse_8x8 + pCharCode * 8)
                 this.i2cWriteBuffer_EEPROM(bu, true)
 
                 return drehen(this.i2cReadBuffer_EEPROM(8), this.qZeichenDrehen)
+            }
+            else if (this.qOLEDArrays_8x8 != null) {
+                return drehen(this.qOLEDArrays_8x8.getPixel8ByteArray(pCharCode), this.qZeichenDrehen)
             } else {
                 // wenn kein EEPROM angeschlossen, Zeichencode aus Array laden
-                return Buffer.fromUTF8("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF")
+                return Buffer.fromUTF8("\xFF\xFF\xFF\xFF\x00\xFF\xFF\xFF")
+
+
                 //return drehen(getPixel8ByteArray(pCharCode), this.qZeichenDrehen)
             }
         }

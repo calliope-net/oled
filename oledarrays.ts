@@ -31,26 +31,26 @@ namespace oled {
             let s8: string
             if (between(pCharCode, 0x20, 0x7F))
                 switch (pCharCode & 0xF0) { // 16 string-Elemente je 8 Byte = 128
-                    case 0x20: s8 = this.x20.get(pCharCode & 0x0F)
-                    case 0x30: s8 = this.x30.get(pCharCode & 0x0F)
-                    case 0x40: s8 = this.x40.get(pCharCode & 0x0F)
-                    case 0x50: s8 = this.x50.get(pCharCode & 0x0F)
-                    case 0x60: s8 = this.x60.get(pCharCode & 0x0F)
-                    case 0x70: s8 = this.x70.get(pCharCode & 0x0F)
-                    default: s8 = this.x70.get(15)
+                    case 0x20: s8 = this.x20.get(pCharCode & 0x0F); break
+                    case 0x30: s8 = this.x30.get(pCharCode & 0x0F); break
+                    case 0x40: s8 = this.x40.get(pCharCode & 0x0F); break
+                    case 0x50: s8 = this.x50.get(pCharCode & 0x0F); break
+                    case 0x60: s8 = this.x60.get(pCharCode & 0x0F); break
+                    case 0x70: s8 = this.x70.get(pCharCode & 0x0F); break
+                    default: s8 = this.x70.get(15); break
                 }
             else
                 switch (pCharCode) {
-                    case "Ä".charCodeAt(0) & 0xFF: s8 = this.x80.get(0)
-                    case "Ö".charCodeAt(0) & 0xFF: s8 = this.x80.get(1)
-                    case "Ü".charCodeAt(0) & 0xFF: s8 = this.x80.get(2)
-                    case "ä".charCodeAt(0) & 0xFF: s8 = this.x80.get(3)
-                    case "ö".charCodeAt(0) & 0xFF: s8 = this.x80.get(4)
-                    case "ü".charCodeAt(0) & 0xFF: s8 = this.x80.get(5)
-                    case "ß".charCodeAt(0) & 0xFF: s8 = this.x80.get(6)
-                    case "€".charCodeAt(0) & 0xFF: s8 = this.x80.get(7)
-                    case "°".charCodeAt(0) & 0xFF: s8 = this.x80.get(8)
-                    default: s8 = this.x70.get(15)
+                    case "Ä".charCodeAt(0) & 0xFF: s8 = this.x80.get(0); break
+                    case "Ö".charCodeAt(0) & 0xFF: s8 = this.x80.get(1); break
+                    case "Ü".charCodeAt(0) & 0xFF: s8 = this.x80.get(2); break
+                    case "ä".charCodeAt(0) & 0xFF: s8 = this.x80.get(3); break
+                    case "ö".charCodeAt(0) & 0xFF: s8 = this.x80.get(4); break
+                    case "ü".charCodeAt(0) & 0xFF: s8 = this.x80.get(5); break
+                    case "ß".charCodeAt(0) & 0xFF: s8 = this.x80.get(6); break
+                    case "€".charCodeAt(0) & 0xFF: s8 = this.x80.get(7); break
+                    case "°".charCodeAt(0) & 0xFF: s8 = this.x80.get(8); break
+                    default: s8 = this.x70.get(15); break
                 }
             return Buffer.fromUTF8(s8)
         }
