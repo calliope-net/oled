@@ -338,7 +338,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
                 if (this.qOLEDeeprom == null) { this.qOLEDeeprom = new oledeeprom() }
 
-                let buEEPROM = Buffer.create(2)
+                //let buEEPROM = Buffer.create(2)
 
                 let buDisplay = Buffer.create(135)
                 let offsetDisplay = this.setCursorBuffer6(buDisplay, 0, 0, 0)
@@ -346,14 +346,15 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
                 for (let page = vonZeile; page <= bisZeile; page++) {
 
-                    buEEPROM.setNumber(NumberFormat.UInt16BE, 0, pEEPROM_Startadresse + page * 128)
+                    //buEEPROM.setNumber(NumberFormat.UInt16BE, 0, pEEPROM_Startadresse + page * 128)
 
                     buDisplay.setUint8(1, 0xB0 | page) // an offset=1 steht die page number (Zeile 0-7)
                     //offsetDisplay = 7 // offset 7-135 sind 128 Byte für die Pixel in einer Zeile
 
-                    this.qOLEDeeprom.i2cWriteBuffer(buEEPROM)
+                    //this.qOLEDeeprom.i2cWriteBuffer(buEEPROM)
+                    //buDisplay.write(7, this.qOLEDeeprom.i2cReadBuffer(128))
 
-                    buDisplay.write(7, this.qOLEDeeprom.i2cReadBuffer(128))
+                    buDisplay.write(7, this.qOLEDeeprom.read(pEEPROM_Startadresse + page * 128, 128))
 
                     this.i2cWriteBuffer_OLED(buDisplay)
                 }

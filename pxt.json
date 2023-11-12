@@ -14,7 +14,8 @@
         "oledarrays.ts",
         "oledimage.ts",
         "oledenums.ts",
-        "oledeeprom.ts"
+        "oledeeprom.ts",
+        "oledfunctions.ts"
     ],
     "testFiles": [
         "test.ts"

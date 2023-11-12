@@ -1,0 +1,7 @@
+
+namespace oled 
+/*
+*/
+{
+
+} // oledfunctions.ts

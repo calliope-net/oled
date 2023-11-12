@@ -34,24 +34,36 @@ neu programmiert von Lutz Elßner im November 2023
         public qEEPROM_Startadresse_8x8 = eEEPROM_Startadresse.F800
         public qEEPROM_Startadresse_5x5 = eEEPROM_Startadresse.EC00
 
-
         constructor(pADDR = eADDR_EEPROM.EEPROM_x50, ck: boolean = true) {
             this.i2cADDR_EEPROM = (pADDR != undefined ? pADDR : eADDR_EEPROM.EEPROM_x50)
             this.i2cError_EEPROM = 0 // Reset Fehlercode
             basic.showString("EE")
         }
 
+
         getPixel_8x8(pCharCode: number): Buffer {
+            //let bu = Buffer.create(2)
+            //bu.setNumber(NumberFormat.UInt16BE, 0, this.qEEPROM_Startadresse_8x8 + pCharCode * 8)
+            //this.i2cWriteBuffer(bu, true)
+            //return this.i2cReadBuffer(8)
+            return this.read(this.qEEPROM_Startadresse_8x8 + pCharCode * 8, 8)
+        }
+
+        getPixel_5x5(pCharCode: number): Buffer {
+            return this.read(this.qEEPROM_Startadresse_5x5 + pCharCode * 4, 4)
+        }
+
+        read(pStartadresse: number, size: number): Buffer {
             let bu = Buffer.create(2)
-            bu.setNumber(NumberFormat.UInt16BE, 0, this.qEEPROM_Startadresse_8x8 + pCharCode * 8)
+            bu.setNumber(NumberFormat.UInt16BE, 0, pStartadresse)
             this.i2cWriteBuffer(bu, true)
-            return this.i2cReadBuffer(8)
+            return this.i2cReadBuffer(size)
         }
 
 
         // ========== i2cWriteBuffer i2cReadBuffer
 
-        i2cWriteBuffer(buf: Buffer, repeat: boolean = false) {
+        private i2cWriteBuffer(buf: Buffer, repeat: boolean = false) {
             if (this.i2cError_EEPROM == 0) { // vorher kein Fehler
                 this.i2cError_EEPROM = pins.i2cWriteBuffer(this.i2cADDR_EEPROM, buf, repeat)
                 if (this.i2cCheck && this.i2cError_EEPROM != 0)  // vorher kein Fehler, wenn (n_i2cCheck=true): beim 1. Fehler anzeigen
@@ -60,7 +72,7 @@ neu programmiert von Lutz Elßner im November 2023
                 this.i2cError_EEPROM = pins.i2cWriteBuffer(this.i2cADDR_EEPROM, buf, repeat)
         }
 
-        i2cReadBuffer(size: number, repeat: boolean = false): Buffer {
+        private i2cReadBuffer(size: number, repeat: boolean = false): Buffer {
             if (!this.i2cCheck || this.i2cError_EEPROM == 0)
                 return pins.i2cReadBuffer(this.i2cADDR_EEPROM, size, repeat)
             else
