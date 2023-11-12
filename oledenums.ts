@@ -12,6 +12,8 @@ namespace oled {
     export function oled_eADDR_EEPROM(pADDR: eADDR_EEPROM): number { return pADDR }
 
     export enum eEEPROM_Startadresse {
+        //%block="kein EEPROM"
+        kein_EEPROM = 0xFFFF,
         //% block="F800 Standard Zeichensatz"
         F800 = 0xF800,
         //% block="F000 zweiter Zeichensatz"

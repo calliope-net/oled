@@ -1,7 +1,7 @@
 
 namespace oled
 /*
-Weiterentwicklung der Idee von M.Klein:
+Weiterentwicklung der Erweiterung von M.Klein:
     https://github.com/MKleinSB/pxt-OLEDpaint
     "pxt-oledpaint": "github:MKleinSB/pxt-OLEDpaint#v1.2.1",
 

@@ -1,7 +1,7 @@
 
 namespace oled
 /*
-Weiterentwicklung der Idee von M.Klein:
+Weiterentwicklung der Erweiterung von M.Klein:
     https://github.com/MKleinSB/pxt-OLEDpaint
     "pxt-oledpaint": "github:MKleinSB/pxt-OLEDpaint#v1.2.1",
 
@@ -11,20 +11,21 @@ neu programmiert von Lutz Elßner im November 2023
     //% group="OLED Display 0.96 (32 KB RAM ab Calliope 2.x)" subcategory=zeichnen
     //% block="i2c %pADDR || invert %pInvert flip %pFlip i2c-Check %ck EEPROM: Zeichen 8x8 %pEEPROM_Startadresse Zeichen 5x5 %pEEPROM_Startadresse_5x5 i2c %pEEPROM_i2cADDR"
     //% weight=4
-    //% pADDR.shadow="oledssd1315_eADDR"
+    //% pADDR.shadow="oled_eADDR_OLED"
     //% pInvert.shadow="toggleOnOff"
     //% pFlip.shadow="toggleOnOff"
     //% ck.shadow="toggleOnOff" ck.defl=1
-    //% pEEPROM_Startadresse.shadow="oledssd1315_eEEPROM_Startadresse"
-    //% pEEPROM_Startadresse_5x5.shadow="oledssd1315_eEEPROM_Startadresse"
-    //% pEEPROM_i2cADDR.shadow="oledssd1315_eADDR_EEPROM"
+    //% pEEPROM_Startadresse_8x8.shadow="oled_eEEPROM_Startadresse"
+    //% pEEPROM_Startadresse_5x5.shadow="oled_eEEPROM_Startadresse"
+    //% pEEPROM_Startadresse_5x5.defl=oled.eEEPROM_Startadresse.EC00
+    //% pEEPROM_i2cADDR.shadow="oled_eADDR_EEPROM"
     //% inlineInputMode=inline
     //% blockSetVariable=OLEDpaint
     export function new_oledpaint(pADDR: number, pInvert?: boolean, pFlip?: boolean, ck?: boolean,
-        pEEPROM_Startadresse?: number, pEEPROM_Startadresse_5x5?: number, pEEPROM_i2cADDR?: number): oledpaint {
+        pEEPROM_Startadresse_8x8?: number, pEEPROM_Startadresse_5x5?: number, pEEPROM_i2cADDR?: number): oledpaint {
 
         return new oledpaint(pADDR, (pInvert ? true : false), (pFlip ? true : false), (ck ? true : false),
-            (pEEPROM_Startadresse == undefined ? eEEPROM_Startadresse.F800 : pEEPROM_Startadresse),
+            (pEEPROM_Startadresse_8x8 == undefined ? eEEPROM_Startadresse.F800 : pEEPROM_Startadresse_8x8),
             (pEEPROM_Startadresse_5x5 == undefined ? eEEPROM_Startadresse.F400 : pEEPROM_Startadresse_5x5),
             (pEEPROM_i2cADDR == undefined ? eADDR_EEPROM.EEPROM_x50 : pEEPROM_i2cADDR))
         // optionaler Parameter kann undefined sein
@@ -37,9 +38,9 @@ neu programmiert von Lutz Elßner im November 2023
         private readonly qBuffer: Buffer[] // Array von 8 Buffern je (qOffset + 128) Byte
 
         constructor(pADDR: number, pInvert: boolean, pFlip: boolean, ck: boolean,
-            pEEPROM_Startadresse: number, pEEPROM_Startadresse_5x5: number, pEEPROM_i2cADDR: number) {
+            pEEPROM_Startadresse_8x8: number, pEEPROM_Startadresse_5x5: number, pEEPROM_i2cADDR: number) {
 
-            super(pADDR, pInvert, pFlip, ck, pEEPROM_Startadresse, pEEPROM_i2cADDR)
+            super(pADDR, pInvert, pFlip, ck, pEEPROM_Startadresse_8x8, pEEPROM_Startadresse_5x5, pEEPROM_i2cADDR)
 
             this.qBuffer = [
                 Buffer.create(this.qOffset + 128), Buffer.create(this.qOffset + 128),
@@ -52,7 +53,7 @@ neu programmiert von Lutz Elßner im November 2023
         //% group="OLED Display 0.96 (32 KB RAM ab Calliope 2.x)" subcategory=zeichnen
         //% block="OLED16x8 %OLEDpaint" weight=2
         //% blockSetVariable=OLED16x8 
-        return_oledclass(): oledclass { return this }
+        return_oledclass(): oledclass { return <oledclass>this }
 
 
         // ========== group="Buffer"
