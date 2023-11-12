@@ -1,16 +1,36 @@
 
-namespace oled{
+namespace oled {
 
-    export enum eZeichenDrehen {
-        //%block="nicht drehen"
-        nicht,
-        //%block="nach links drehen"
-        links,
-        //%block="nach rechts drehen"
-        rechts,
-        //%block="spiegeln"
-        spiegeln
+    // ========== blockId=oled_ === für pADDR.shadow="oled_eADDR_OLED"
+
+    export enum eADDR_OLED { OLED_16x8_x3C = 0x3C, OLED_16x8_x3D = 0x3D }
+    //% blockId=oled_eADDR_OLED block="%pADDR" blockHidden=true
+    export function oled_eADDR_OLED(pADDR: eADDR_OLED): number { return pADDR }
+
+    export enum eADDR_EEPROM { EEPROM_x50 = 0x50 }
+    //% blockId=oled_eADDR_EEPROM block="%pADDR" blockHidden=true
+    export function oled_eADDR_EEPROM(pADDR: eADDR_EEPROM): number { return pADDR }
+
+    export enum eEEPROM_Startadresse {
+        //% block="F800 Standard Zeichensatz"
+        F800 = 0xF800,
+        //% block="F000 zweiter Zeichensatz"
+        F000 = 0xF000,
+        //% block="F400 Grafikzeichen"
+        F400 = 0xF400,
+        //% block="FC00 Sonderzeichen"
+        FC00 = 0xFC00,
+        //% block="EC00 5x5 Zeichensatz"
+        EC00 = 0xEC00
     }
+    //% blockId=oled_eEEPROM_Startadresse block="%p" blockHidden=true
+    export function oled_eEEPROM_Startadresse(p: eEEPROM_Startadresse): number { return p }
+
+    //% blockId=oled_text block="%s" blockHidden=true
+    export function oled_text(s: string): string { return s }
+
+
+    // ========== i2c Register
 
     export enum eCONTROL { // Co Continuation bit(7); D/C# Data/Command Selection bit(6); following by six "0"s
         // CONTROL ist immer das 1. Byte im Buffer
@@ -32,13 +52,6 @@ namespace oled{
         C8_COM_SCAN_DEC = 0xC8, // remapped mode Scan from COM[N-1] to COM0
     }
 
-    export enum eAlign {
-        //% block="linksbündig"
-        links,
-        //% block="rechtsbündig"
-        rechts
-    }
-
     export enum eDisplayCommand {
         //% block="AF AE Set Display ON/OFF"
         ON,
@@ -52,19 +65,25 @@ namespace oled{
         ENTIRE_ON
     }
 
-    // ========== blockId=oledssd1315_
 
-    //% blockId=oledssd1315_eADDR block="%pADDR" blockHidden=true
-    export function oledssd1315_eADDR(pADDR: eADDR): number { return pADDR }
+    // ==========
 
-    //% blockId=oledssd1315_eADDR_EEPROM block="%pADDR" blockHidden=true
-    export function oledssd1315_eADDR_EEPROM(pADDR: eADDR_EEPROM): number { return pADDR }
+    export enum eZeichenDrehen {
+        //%block="nicht drehen"
+        nicht,
+        //%block="nach links drehen"
+        links,
+        //%block="nach rechts drehen"
+        rechts,
+        //%block="spiegeln"
+        spiegeln
+    }
 
-    //% blockId=oledssd1315_eEEPROM_Startadresse block="%p" blockHidden=true
-    export function oledssd1315_eEEPROM_Startadresse(p: eEEPROM_Startadresse): number { return p }
-
-    //% blockId=oledssd1315_text block="%s" blockHidden=true
-    export function oledssd1315_text(s: string): string { return s }
-
+    export enum eAlign {
+        //% block="linksbündig"
+        links,
+        //% block="rechtsbündig"
+        rechts
+    }
 
 } // oledenums.ts

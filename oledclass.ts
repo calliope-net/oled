@@ -1,5 +1,5 @@
 
-//% color=#0000BF icon="\uf108" block="OLED 16x8" weight=20
+//% color=#0000BF icon="\uf108" block="OLED Display" weight=20
 namespace oled
 /* 230908 231103 https://github.com/calliope-net/oled-16x8
 
@@ -16,18 +16,15 @@ https://cdn-shop.adafruit.com/datasheets/UG-2864HSWEG01.pdf (Seite 15, 20 im pdf
 OLED Display mit EEPROM neu programmiert von Lutz Elßner im September 2023
 Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im November 2023
 */ {
-    export enum eADDR { OLED_16x8_x3C = 0x3C, OLED_16x8_x3D = 0x3D }
-    export enum eADDR_EEPROM { EEPROM_x50 = 0x50 }
-    export enum eEEPROM_Startadresse { F800 = 0xF800, FC00 = 0xFC00, F000 = 0xF000, F400 = 0xF400 }
-
+ 
     //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
     //% block="i2c %pADDR || invert %pInvert flip %pFlip i2c-Check %ck EEPROM: Zeichensatz %pEEPROM_Startadresse i2c %pEEPROM_i2cADDR"
-    //% pADDR.shadow="oledssd1315_eADDR"
+    //% pADDR.shadow="oled_eADDR_OLED"
     //% pInvert.shadow="toggleOnOff"
     //% pFlip.shadow="toggleOnOff"
     //% ck.shadow="toggleOnOff" ck.defl=1
     //% pEEPROM_Startadresse.shadow="oledssd1315_eEEPROM_Startadresse"
-    //% pEEPROM_i2cADDR.shadow="oledssd1315_eADDR_EEPROM"
+    //% pEEPROM_i2cADDR.shadow="oled_eADDR_EEPROM"
     //% inlineInputMode=inline
     //% blockSetVariable=OLED16x8
     export function beimStart(pADDR: number, pInvert?: boolean, pFlip?: boolean, ck?: boolean,
@@ -173,7 +170,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
         //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
         //% block="Display %OLED16x8 löschen || von Zeile %vonZeile bis Zeile %bisZeile mit Bitmuster %charcode" weight=2
-        //% pADDR.shadow="oledssd1315_eADDR"
+        //% pADDR.shadow="oled_eADDR"
         //% vonZeile.min=0 vonZeile.max=7 vonZeile.defl=0
         //% bisZeile.min=0 bisZeile.max=7 bisZeile.defl=7
         //% charcode.min=0 charcode.max=255 charcode.defl=0
@@ -201,7 +198,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% group="Text 16x8 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
         //% block="16x8 %OLED16x8 Text Zeile %row von %col bis %end %pText || %pAlign" weight=8
         //% row.min=0 row.max=7 col.min=0 col.max=15 end.min=0 end.max=15 end.defl=15
-        //% pText.shadow="oledssd1315_text"
+        //% pText.shadow="oled_text"
         //% pAlign.defl=0
         //% inlineInputMode=inline
         writeText16x8(row: number, col: number, end: number, pText: any, pAlign?: eAlign) {
@@ -238,7 +235,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
         //% group="Text 16x8 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
         //% block="16x8 %OLED16x8 Text ab Cursor %pText" weight=4
-        //% pText.shadow="oledssd1315_text"
+        //% pText.shadow="oled_text"
         writeText(pText: any) {
             let text: string = convertToText(pText)
             this.writeTextBuffer(Buffer.create(1 + text.length * 8), 0, text)
@@ -251,7 +248,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% group="Text 8x16 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
         //% block="8x16 %OLED16x8 Text Zeile %row von %col bis %end %pText || %pAlign" weight=7
         //% row.min=0 row.max=15 col.min=0 col.max=7 end.min=0 end.max=7 end.defl=7
-        //% pText.shadow="oledssd1315_text"
+        //% pText.shadow="oled_text"
         //% pAlign.defl=0
         //% inlineInputMode=inline
         writeText8x16(row: number, col: number, end: number, pText: any, pAlign?: eAlign) {
@@ -289,7 +286,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
         //% group="kopiert 1024 Byte vom EEPROM auf ein Display (Text, Bild)" advanced=true
         //% block="16x8 %OLED16x8 Display füllen %pEEPROM_Startadresse || von Zeile %vonZeile bis Zeile %bisZeile"
-        //% pEEPROM_Startadresse.shadow="oledssd1315_eEEPROM_Startadresse"
+        //% pEEPROM_Startadresse.shadow="oled_eEEPROM_Startadresse"
         //% vonZeile.min=0 vonZeile.max=7 vonZeile.defl=0
         //% bisZeile.min=0 bisZeile.max=7 bisZeile.defl=7
         //% inlineInputMode=inline
@@ -430,14 +427,14 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
     } // class oledclass
 
-    // namespace oledssd1315
+    // namespace oled
 
 
     // ========== group="Text" advanced=true
 
     //% group="Text" advanced=true
     //% block="kehre %pText um"
-    //% pText.shadow="oledssd1315_text"
+    //% pText.shadow="oled_text"
     export function kehreum(pText: any): string {
         let text: string = convertToText(pText)
         let r: string = ""
