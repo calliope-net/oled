@@ -1,7 +1,7 @@
 
 namespace oled {
 
-    let x20: string[], x30: string[], x40: string[], x50: string[], x60: string[], x70: string[]
+    //let x20: string[], x30: string[], x40: string[], x50: string[], x60: string[], x70: string[]
 
     // group="Zeichensatz aus Arrays laden"
     // block="Arrays laden - Zeichencodes | aus calliope-net/oled-eeprom | 20-2F %p20 30-3F %p30 40-4F %p40 50-5F %p50 60-6F %p60 70-7F %p70" subcategory="Arrays"
@@ -12,7 +12,7 @@ namespace oled {
 
 
     export function getPixel8ByteArray(pCharCode: number) {
-        let charCodeArray: string[]
+        /* let charCodeArray: string[]
         switch (pCharCode & 0xF0) {
             //case 0x00: { charCodeArray = extendedCharacters; break; }
             case 0x20: { charCodeArray = x20; break; } // 16 string-Elemente je 8 Byte = 128
@@ -25,8 +25,8 @@ namespace oled {
         }
         if (charCodeArray != undefined && charCodeArray.length == 16)
             return Buffer.fromUTF8(charCodeArray.get(pCharCode & 0x0F))
-        else
-            return Buffer.fromUTF8("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF")
+        else */
+        return Buffer.fromUTF8("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF")
     }
 
     export class oledarrays {
@@ -37,6 +37,35 @@ namespace oled {
         private readonly x60: string[]
         private readonly x70: string[]
         private readonly x80: string[]
+
+
+        getPixel8ByteArray(pCharCode: number): Buffer {
+            let s8: string
+            if (between(pCharCode, 0x20, 0x7F))
+                switch (pCharCode & 0xF0) { // 16 string-Elemente je 8 Byte = 128
+                    case 0x20: s8 = this.x20.get(pCharCode & 0x0F)
+                    case 0x30: s8 = this.x30.get(pCharCode & 0x0F)
+                    case 0x40: s8 = this.x40.get(pCharCode & 0x0F)
+                    case 0x50: s8 = this.x50.get(pCharCode & 0x0F)
+                    case 0x60: s8 = this.x60.get(pCharCode & 0x0F)
+                    case 0x70: s8 = this.x70.get(pCharCode & 0x0F)
+                    default: s8 = this.x70.get(15)
+                }
+            else
+                switch (pCharCode) {
+                    case "Ä".charCodeAt(0) & 0xFF: s8 = this.x80.get(0)
+                    case "Ö".charCodeAt(0) & 0xFF: s8 = this.x80.get(1)
+                    case "Ü".charCodeAt(0) & 0xFF: s8 = this.x80.get(2)
+                    case "ä".charCodeAt(0) & 0xFF: s8 = this.x80.get(3)
+                    case "ö".charCodeAt(0) & 0xFF: s8 = this.x80.get(4)
+                    case "ü".charCodeAt(0) & 0xFF: s8 = this.x80.get(5)
+                    case "ß".charCodeAt(0) & 0xFF: s8 = this.x80.get(6)
+                    case "€".charCodeAt(0) & 0xFF: s8 = this.x80.get(7)
+                    case "°".charCodeAt(0) & 0xFF: s8 = this.x80.get(8)
+                    default: s8 = this.x70.get(15)
+                }
+            return Buffer.fromUTF8(s8)
+        }
 
         constructor() {
 
@@ -158,7 +187,7 @@ namespace oled {
                 "\x00\xFE\x09\x49\x36\x00\x00\x00", // "ß"
                 "\x00\x14\x3E\x55\x55\x55\x14\x00", // "€"
                 "\x00\x02\x05\x02\x00\x00\x00\x00"  // "°"
-            ];
+            ]
         } // constructor
     }
 } // oledarrays.ts
