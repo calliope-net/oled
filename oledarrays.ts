@@ -1,41 +1,23 @@
 
 namespace oled {
 
-    //let x20: string[], x30: string[], x40: string[], x50: string[], x60: string[], x70: string[]
-
-    // group="Zeichensatz aus Arrays laden"
-    // block="Arrays laden - Zeichencodes | aus calliope-net/oled-eeprom | 20-2F %p20 30-3F %p30 40-4F %p40 50-5F %p50 60-6F %p60 70-7F %p70" subcategory="Arrays"
-    /*  export function ladeArrays(p20: string[], p30: string[], p40: string[], p50: string[], p60: string[], p70: string[]) {
-        x20 = p20; x30 = p30; x40 = p40; x50 = p50; x60 = p60; x70 = p70
-    }  */
-
-
-    /* 
-        export function getPixel8ByteArray(pCharCode: number) {
-            let charCodeArray: string[]
-            switch (pCharCode & 0xF0) {
-                //case 0x00: { charCodeArray = extendedCharacters; break; }
-                case 0x20: { charCodeArray = x20; break; } // 16 string-Elemente je 8 Byte = 128
-                case 0x30: { charCodeArray = x30; break; }
-                case 0x40: { charCodeArray = x40; break; }
-                case 0x50: { charCodeArray = x50; break; }
-                case 0x60: { charCodeArray = x60; break; }
-                case 0x70: { charCodeArray = x70; break; }
-                //default: { charCodeArray.length = 0 }
-            }
-            if (charCodeArray != undefined && charCodeArray.length == 16)
-                return Buffer.fromUTF8(charCodeArray.get(pCharCode & 0x0F))
-            else
-            return Buffer.fromUTF8("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF")
-        } */
-
-
-    //% blockId=oled_new_oledarrays block="aus Arrays" blockHidden=true
-    export function new_oledarrays(): oledarrays {
-        return new oledarrays()
+    //% blockId=oled_new_oledarrays_5x5 block="aus Arrays" blockHidden=true
+    export function new_oledarrays_5x5(): oledarrays_5x5 {
+        return new oledarrays_5x5()
     }
 
-    export class oledarrays {
+    //% blockId=oled_new_oledarrays_8x8 block="aus Arrays" blockHidden=true
+    export function new_oledarrays_8x8(): oledarrays_8x8 {
+        return new oledarrays_8x8()
+    }
+
+
+    export class oledarrays_5x5 {
+
+    }
+
+
+    export class oledarrays_8x8 {
         private readonly x20: string[]
         private readonly x30: string[]
         private readonly x40: string[]

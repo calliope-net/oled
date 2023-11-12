@@ -46,15 +46,18 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
     export class oledclass {
         private readonly i2cADDR_OLED: number
-        private readonly i2cADDR_EEPROM: number
         private readonly i2cCheck: boolean // i2c-Check
-        private readonly qEEPROM_Startadresse_8x8: number
-        private readonly qEEPROM_Startadresse_5x5: number
-        private qZeichenDrehen: eZeichenDrehen = eZeichenDrehen.nicht
-        private qoledarrays: oledarrays
-
         private i2cError_OLED: number = 0 // Fehlercode vom letzten WriteBuffer (0 ist kein Fehler)
+        // EEPROM
+        private i2cADDR_EEPROM: number
         private i2cError_EEPROM: number = 0
+        private qEEPROM_Startadresse_8x8: number
+        private qEEPROM_Startadresse_5x5: number
+
+        private qZeichenDrehen: eZeichenDrehen = eZeichenDrehen.nicht
+        private qOLEDArrays_8x8: oledarrays_8x8
+        private qOLEDArrays_5x5: oledarrays_5x5
+
 
         constructor(pADDR: number, pInvert: boolean, pFlip: boolean, ck: boolean,
             pEEPROM_Startadresse_8x8: number, pEEPROM_Startadresse_5x5: number, pEEPROM_i2cADDR: number) {
@@ -172,10 +175,17 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         }
 
         //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
-        //% block="Zeichensatz %OLED16x8 %poledarrays" weight=4
-        //% poledarrays.shadow="oled_new_oledarrays"
-        set_oledarrays(poledarrays: oledarrays) {
-            this.qoledarrays = poledarrays
+        //% block="Zeichen 8x8 %OLED16x8 %p_8x8" weight=4
+        //% p_8x8.shadow="oled_new_oledarrays_8x8"
+        set_oledarrays_8x8(p_8x8: oledarrays_8x8) {
+            this.qOLEDArrays_8x8 = p_8x8
+        }
+
+        //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
+        //% block="Zeichen 5x5 %OLED16x8 %p_5x5" weight=3
+        //% p_5x5.shadow="oled_new_oledarrays_5x5"
+        set_oledarrays_5x5(p_5x5: oledarrays_5x5) {
+            this.qOLEDArrays_5x5 = p_5x5
         }
 
         // ========== group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
