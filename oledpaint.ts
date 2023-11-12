@@ -219,8 +219,8 @@ neu programmiert von Lutz Elßner im November 2023
 
 
         //% group="in den Buffer zeichnen (dann 'Buffer anzeigen' verwenden)" subcategory=zeichnen
-        //% block="Buffer %OLEDpaint einzelnes Segment %seg an Position %pos" weight=7
-        //% pos.min=0 pos.max=3
+        //% block="Buffer %OLEDpaint ein Segment %seg an Position (0-96) %pos" weight=7
+        //% pos.min=0 pos.max=96
         drawsegment(seg: eSegment, pos: number) {
             switch (seg) {
                 case eSegment.A: { this.writeImageOLED(quer, pos + 4, 0); break }
@@ -235,42 +235,48 @@ neu programmiert von Lutz Elßner im November 2023
 
 
 
-        // ========== group="Buffer"
+        // ========== group="1 Byte (8 Pixel) in den Buffer zeichnen / lesen" subcategory=zeichnen
 
-        //% group="Buffer" subcategory=zeichnen
-        //% block="zeichnen %OLEDpaint Zeile 0↓7 %page Segment 0→127 %seg Bitmuster 0↓255 %byte" weight=4
+        //% group="1 Byte (8 Pixel) in den Buffer zeichnen / lesen" subcategory=zeichnen
+        //% block="Buffer %OLEDpaint Zeile 0↓7 %page Segment 0→127 %seg Bitmuster 0↓255 %byte" weight=4
         //% page.min=0 page.max=7 page.defl=0
         //% seg.min=0 seg.max=127 seg.defl=0
         //% byte.min=0 byte.max=255 byte.defl=0
-        writeSegment(page: number, seg: number, byte: number) {
+        writeByte(page: number, seg: number, byte: number) {
             if (between(page, 0, 7) && between(seg, 0, 127) && between(byte, 0, 255)) {
                 this.qBuffer.get(page).setUint8(this.qOffset + seg, byte)
             }
         }
 
-        //% group="Buffer" subcategory=zeichnen
-        //% block="lesen %OLEDpaint Zeile 0↓7 %page Segment 0→127 %seg " weight=2
+        //% group="1 Byte (8 Pixel) in den Buffer zeichnen / lesen" subcategory=zeichnen
+        //% block="Buffer %OLEDpaint Zeile 0↓7 %page Segment 0→127 %seg Byte lesen" weight=2
         //% page.min=0 page.max=7 page.defl=0
         //% seg.min=0 seg.max=127 seg.defl=0
-        readSegment(page: number, seg: number) {
+        readByte(page: number, seg: number) {
             if (between(page, 0, 7) && between(seg, 0, 127))
                 return this.qBuffer.get(page).getUint8(this.qOffset + seg)
             else
                 return 0
         }
 
-        //% group="Buffer" subcategory=zeichnen
-        //% block="schreiben %OLEDpaint Pixel an x %x y %y" weight=1
-        //% x.min=0, x.max=127
-        //% y.min=0, y.max=63
-        setPixelbuffer(x: number, y: number) {
-            let page = y >> 3                                // 64/8 = 0..7
-            let bu: Buffer = this.qBuffer.get(page)
-            let shift_page = y % 8                           //calculate the page to write to
-            //let ind = x + page * 128 + 1                     //calculate which register in the page to write to.
-            let seg = this.qOffset + x
-            let screenPixel = (bu[seg] | (1 << shift_page))  //set the screen data byte
-            bu[seg] = screenPixel                            //store data in screen buffer
+
+
+        // ========== group="1 Pixel in den Buffer zeichnen / lesen" subcategory=zeichnen
+
+        //% group="1 Pixel in den Buffer zeichnen / lesen" subcategory=zeichnen
+        //% block="Buffer %OLEDpaint Pixel an x 0→127 %x y 0↓63 %y" weight=1
+        //% x.min=0, x.max=127 y.min=0, y.max=63
+        setPixel(x: number, y: number) {
+            if (between(x, 0, 127) && between(y, 0, 63)) {
+                let page = y >> 3                                // 64/8 = 0..7
+                let bu: Buffer = this.qBuffer.get(page)
+                let shift_page = y % 8                           //calculate the page to write to
+                //let ind = x + page * 128 + 1                     //calculate which register in the page to write to.
+                let seg = this.qOffset + x
+                let screenPixel = (bu[seg] | (1 << shift_page))  //set the screen data byte
+                bu[seg] = screenPixel                            //store data in screen buffer
+                //bu.setUint8(seg, (bu.getUint8(seg) | (1 << (y % 8))))
+            }
         }
 
 
@@ -286,7 +292,7 @@ neu programmiert von Lutz Elßner im November 2023
             for (let y = 0; y <= im.height() - 1; y++) {
                 for (let x = 0; x <= im.width() - 1; x++) {
                     if ((im.pixel(x, y) ? 1 : 0)) {
-                        this.setPixelbuffer(x + xpos, y + ypos)
+                        this.setPixel(x + xpos, y + ypos)
                     }
                 }
             }
