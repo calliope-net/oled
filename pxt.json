@@ -12,7 +12,8 @@
         "oledclass.ts",
         "oledpaint.ts",
         "oledarrays.ts",
-        "oledimage.ts"
+        "oledimage.ts",
+        "oledenums.ts"
     ],
     "testFiles": [
         "test.ts"
