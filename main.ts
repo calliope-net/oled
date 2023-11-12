@@ -1,4 +1,5 @@
 input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
+    OLEDtext.zeichenDrehen(oled.eZeichenDrehen.links)
     OLEDtext.writeText16x8(0, 0, 15, oled.oled_text("QWER"))
 })
 input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
