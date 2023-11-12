@@ -31,7 +31,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
     //% pEEPROM_i2cADDR.shadow="oled_eADDR_EEPROM"
 
     //% inlineInputMode=inline
-    //% blockSetVariable=OLED16x8
+    //% blockSetVariable=OLEDtext
     export function new_oledclass(pADDR: number, pInvert?: boolean, pFlip?: boolean, ck?: boolean): oledclass {
 
         return new oledclass(pADDR, (pInvert ? true : false), (pFlip ? true : false), (ck ? true : false))
@@ -76,7 +76,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         // ========== group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
 
         //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
-        //% block="init %OLED16x8 || invert %pInvert drehen %pFlip" weight=6
+        //% block="init %OLEDtext || invert %pInvert drehen %pFlip" weight=6
         //% pInvert.shadow="toggleOnOff" pInvert.defl=false
         //% pFlip.shadow="toggleOnOff" pFlip.defl=false
         init(pInvert?: boolean, pFlip?: boolean): void {
@@ -176,14 +176,14 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         // ========== group="Zeichensatz einstellen (ohne EEPROM)" subcategory="beim Start"
 
         //% group="Zeichensatz einstellen (ohne EEPROM)" subcategory="beim Start"
-        //% block="Zeichen 8x8 %OLED16x8 %p_8x8" weight=4
+        //% block="Zeichen 8x8 %OLEDtext %p_8x8" weight=4
         //% p_8x8.shadow="oled_new_oledarrays_8x8"
         set_oledarrays_8x8(p_8x8: oledarrays_8x8) {
             this.qOLEDArrays_8x8 = p_8x8
         }
 
         //% group="Zeichensatz einstellen (ohne EEPROM)" subcategory="beim Start"
-        //% block="Zeichen 5x5 %OLED16x8 %p_5x5" weight=3
+        //% block="Zeichen 5x5 %OLEDtext %p_5x5" weight=3
         //% p_5x5.shadow="oled_new_oledarrays_5x5"
         set_oledarrays_5x5(p_5x5: oledarrays_5x5) {
             this.qOLEDArrays_5x5 = p_5x5
@@ -193,7 +193,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         // ========== group="Zeichensatz einstellen (mit EEPROM)" subcategory="beim Start"
 
         //% group="Zeichensatz einstellen (mit EEPROM)" subcategory="beim Start"
-        //% block="Zeichen 8x8 %OLED16x8 %pEEPROM_Startadresse_8x8 || i2c %pEEPROM_i2cADDR" weight=4
+        //% block="Zeichen 8x8 %OLEDtext %pEEPROM_Startadresse_8x8 || i2c %pEEPROM_i2cADDR" weight=4
         //% pEEPROM_Startadresse_8x8.shadow=oled_eEEPROM_Startadresse
         //% pEEPROM_Startadresse_8x8.defl=oled.eEEPROM_Startadresse.F800
         //% pEEPROM_i2cADDR.shadow=oled_eADDR_EEPROM
@@ -203,7 +203,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         }
 
         //% group="Zeichensatz einstellen (mit EEPROM)" subcategory="beim Start"
-        //% block="Zeichen 5x5 %OLED16x8 %pEEPROM_Startadresse_5x5 || i2c %pEEPROM_i2cADDR" weight=2
+        //% block="Zeichen 5x5 %OLEDtext %pEEPROM_Startadresse_5x5 || i2c %pEEPROM_i2cADDR" weight=2
         //% pEEPROM_Startadresse_5x5.shadow=oled_eEEPROM_Startadresse
         //% pEEPROM_Startadresse_5x5.defl=oled.eEEPROM_Startadresse.EC00
         //% pEEPROM_i2cADDR.shadow=oled_eADDR_EEPROM
@@ -217,7 +217,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
 
         //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
-        //% block="Display %OLED16x8 löschen || von Zeile %vonZeile bis Zeile %bisZeile mit Bitmuster %charcode" weight=2
+        //% block="Display %OLEDtext löschen || von Zeile %vonZeile bis Zeile %bisZeile mit Bitmuster %charcode" weight=2
         //% pADDR.shadow="oled_eADDR"
         //% vonZeile.min=0 vonZeile.max=7 vonZeile.defl=0
         //% bisZeile.min=0 bisZeile.max=7 bisZeile.defl=7
@@ -244,7 +244,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         // ========== group="Text 16x8 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
 
         //% group="Text 16x8 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
-        //% block="16x8 %OLED16x8 Text Zeile %row von %col bis %end %pText || %pAlign" weight=8
+        //% block="16x8 %OLEDtext Text Zeile %row von %col bis %end %pText || %pAlign" weight=8
         //% row.min=0 row.max=7 col.min=0 col.max=15 end.min=0 end.max=15 end.defl=15
         //% pText.shadow="oled_text"
         //% pAlign.defl=0
@@ -270,7 +270,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         }
 
         //% group="Text 16x8 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
-        //% block="16x8 %OLED16x8 Cursor Zeile %row von %col" weight=6
+        //% block="16x8 %OLEDtext Cursor Zeile %row von %col" weight=6
         //% row.min=0 row.max=7 col.min=0 col.max=15
         setCursor(row: number, col: number) {
             if (between(row, 0, 7) && between(col, 0, 15)) {
@@ -282,7 +282,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         }
 
         //% group="Text 16x8 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
-        //% block="16x8 %OLED16x8 Text ab Cursor %pText" weight=4
+        //% block="16x8 %OLEDtext Text ab Cursor %pText" weight=4
         //% pText.shadow="oled_text"
         writeText(pText: any) {
             let text: string = convertToText(pText)
@@ -294,7 +294,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         // ========== group="Text 8x16 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
 
         //% group="Text 8x16 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
-        //% block="8x16 %OLED16x8 Text Zeile %row von %col bis %end %pText || %pAlign" weight=7
+        //% block="8x16 %OLEDtext Text Zeile %row von %col bis %end %pText || %pAlign" weight=7
         //% row.min=0 row.max=15 col.min=0 col.max=7 end.min=0 end.max=7 end.defl=7
         //% pText.shadow="oled_text"
         //% pAlign.defl=0
@@ -333,7 +333,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         // ========== group="kopiert 1024 Byte vom EEPROM auf ein Display (Text, Bild)"
 
         //% group="kopiert 1024 Byte vom EEPROM auf ein Display (Text, Bild)" advanced=true
-        //% block="16x8 %OLED16x8 Display füllen %pEEPROM_Startadresse || von Zeile %vonZeile bis Zeile %bisZeile"
+        //% block="16x8 %OLEDtext Display füllen %pEEPROM_Startadresse || von Zeile %vonZeile bis Zeile %bisZeile"
         //% pEEPROM_Startadresse.shadow="oled_eEEPROM_Startadresse"
         //% vonZeile.min=0 vonZeile.max=7 vonZeile.defl=0
         //% bisZeile.min=0 bisZeile.max=7 bisZeile.defl=7
@@ -366,7 +366,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         // ========== group="Display Command" advanced=true
 
         //% group="Display Command" advanced=true
-        //% block="Display %OLED16x8 Command %pDisplayCommand %pON" weight=6
+        //% block="Display %OLEDtext Command %pDisplayCommand %pON" weight=6
         //% pON.shadow="toggleOnOff"
         displayCommand(pDisplayCommand: eDisplayCommand, pON: boolean) {
             let bu = Buffer.create(2)
@@ -382,18 +382,18 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         }
 
         //% group="Display Command" advanced=true
-        //% block="Zeichen %OLED16x8 %pZeichenDrehen" weight=4
+        //% block="Zeichen %OLEDtext %pZeichenDrehen" weight=4
         zeichenDrehen(pZeichenDrehen: eZeichenDrehen) { this.qZeichenDrehen = pZeichenDrehen }
 
 
         // ========== group="i2c Fehlercode" advanced=true
 
         //% group="i2c Fehlercode" advanced=true
-        //% block="%OLED16x8 i2c Fehlercode OLED" weight=4
+        //% block="%OLEDtext i2c Fehlercode OLED" weight=4
         geti2cError_OLED() { return this.i2cError_OLED }
 
         //% group="i2c Fehlercode" advanced=true
-        //% block="%OLED16x8 i2c Fehlercode EEPROM" weight=2
+        //% block="%OLEDtext i2c Fehlercode EEPROM" weight=2
         geti2cError_EEPROM() { return this.i2cError_EEPROM }
 
 

@@ -50,7 +50,7 @@ neu programmiert von Lutz Elßner im November 2023
 
         //% group="OLED Display 0.96 (32 KB RAM ab Calliope 2.x)" subcategory="beim Start"
         //% block="Text %OLEDpaint" weight=2
-        //% blockSetVariable=OLED16x8 
+        //% blockSetVariable=OLEDtext 
         return_oledclass(): oledclass { return <oledclass>this }
 
 
