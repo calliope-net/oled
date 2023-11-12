@@ -17,9 +17,8 @@ OLED Display mit EEPROM neu programmiert von Lutz Elßner im September 2023
 Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im November 2023
 */ {
 
-    //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit" subcategory="beim Start"
+    //% group="nur Text anzeigen; mit EEPROM (am wenigsten Speicherplatz)" subcategory="beim Start"
     //% block="i2c %pADDR nur Text || invert %pInvert flip %pFlip i2c-Check %ck"
-    //% weight=8
     //% pADDR.shadow="oled_eADDR_OLED"
     //% pInvert.shadow="toggleOnOff"
     //% pFlip.shadow="toggleOnOff"
@@ -32,6 +31,20 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         // optionaler Parameter kann undefined sein
     }
 
+
+    //% group="Grafik und Text; mit EEPROM (beide Blöcke verwenden)" subcategory="beim Start"
+    //% block="i2c %pADDR Grafik und Text || invert %pInvert flip %pFlip i2c-Check %ck" weight=4
+    //% pADDR.shadow="oled_eADDR_OLED"
+    //% pInvert.shadow="toggleOnOff"
+    //% pFlip.shadow="toggleOnOff"
+    //% ck.shadow="toggleOnOff" ck.defl=1
+    //% inlineInputMode=inline
+    //% blockSetVariable=OLEDpaint
+    export function new_oledpaint(pADDR: number, pInvert?: boolean, pFlip?: boolean, ck?: boolean): oledpaint {
+
+        return new oledpaint(pADDR, (pInvert ? true : false), (pFlip ? true : false), (ck ? true : false))
+        // optionaler Parameter kann undefined sein
+    }
 
 
 
@@ -62,10 +75,99 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         }
 
 
-        // ========== group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
 
-        //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
-        //% block="init %OLEDtext || invert %pInvert drehen %pFlip" weight=6
+        // ========== group="Text 16x8 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
+
+        //% group="Text 16x8 anzeigen"
+        //% block="16x8 %OLEDtext Text Zeile %row von %col bis %end %pText || %pAlign" weight=8
+        //% row.min=0 row.max=7 col.min=0 col.max=15 end.min=0 end.max=15 end.defl=15
+        //% pText.shadow="oled_text"
+        //% pAlign.defl=0
+        //% inlineInputMode=inline
+        writeText16x8(row: number, col: number, end: number, pText: any, pAlign?: eAlign) {
+            let text: string = convertToText(pText)
+            let len: number = end - col + 1
+            if (between(row, 0, 7) && between(col, 0, 15) && between(len, 0, 16)) {
+
+                if (text.length > len)
+                    text = text.substr(0, len)
+                else if (text.length < len && pAlign == eAlign.rechts)
+                    text = "                ".substr(0, len - text.length) + text
+                else if (text.length < len)
+                    text = text + "                ".substr(0, len - text.length)
+                // else { } // Original Text text.length == len
+
+                let bu = Buffer.create(7 + text.length * 8)
+                let offset = this.setCursorBuffer6(bu, 0, row, col) // setCursor
+
+                this.writeTextBuffer(bu, offset, text)
+            }
+        }
+
+        //% group="Text 16x8 anzeigen"
+        //% block="16x8 %OLEDtext Cursor Zeile %row von %col" weight=6
+        //% row.min=0 row.max=7 col.min=0 col.max=15
+        setCursor(row: number, col: number) {
+            if (between(row, 0, 7) && between(col, 0, 15)) {
+                let bu = Buffer.create(6)
+                this.setCursorBuffer6(bu, 0, row, col)
+                this.i2cWriteBuffer_OLED(bu)
+                control.waitMicros(50)
+            }
+        }
+
+        //% group="Text 16x8 anzeigen"
+        //% block="16x8 %OLEDtext Text ab Cursor %pText" weight=4
+        //% pText.shadow="oled_text"
+        writeText(pText: any) {
+            let text: string = convertToText(pText)
+            this.writeTextBuffer(Buffer.create(1 + text.length * 8), 0, text)
+        }
+
+
+
+        // ========== group="Text 8x16 anzeigen"
+
+        //% group="Text 8x16 anzeigen"
+        //% block="8x16 %OLEDtext Text Zeile %row von %col bis %end %pText || %pAlign" weight=7
+        //% row.min=0 row.max=15 col.min=0 col.max=7 end.min=0 end.max=7 end.defl=7
+        //% pText.shadow="oled_text"
+        //% pAlign.defl=0
+        //% inlineInputMode=inline
+        writeText8x16(row: number, col: number, end: number, pText: any, pAlign?: eAlign) {
+            let text: string = convertToText(pText)
+            let len: number = end - col + 1
+            if (between(row, 0, 15) && between(col, 0, 7) && between(len, 0, 8)) {
+
+                if (text.length > len)
+                    text = text.substr(0, len)
+                else if (text.length < len && pAlign == eAlign.rechts)
+                    text = "        ".substr(0, len - text.length) + text
+                else if (text.length < len)
+                    text = text + "        ".substr(0, len - text.length)
+                // else { } // Original Text text.length == len
+
+                let bu = Buffer.create(7 + 8) // 7 CONTROL+command + 8 text
+                let offset = this.setCursorBuffer6(bu, 0, 7 - col, row) // setCursor
+                bu.setUint8(offset++, eCONTROL.x40_Data) // CONTROL Byte 0x40: Display Data
+
+                for (let j = 0; j < text.length; j++) {
+                    bu.setUint8(1, 0xB0 | (7 - (col + j)) & 0x07)      // page number 7-0 B7-B0
+                    bu.write(8, this.getPixel_8x8(text.charCodeAt(j)))
+
+                    this.i2cWriteBuffer_OLED(bu)
+                }
+                control.waitMicros(50)
+            }
+        }
+
+
+
+
+        // ========== group="OLED Display"
+
+        //% group="OLED Display"
+        //% block="Display %OLEDtext initialisieren || invert %pInvert drehen %pFlip" weight=6
         //% pInvert.shadow="toggleOnOff" pInvert.defl=false
         //% pFlip.shadow="toggleOnOff" pFlip.defl=false
         init(pInvert?: boolean, pFlip?: boolean): void {
@@ -162,28 +264,26 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         }
 
 
+
+        // ========== subcategory="beim Start" ==========
+
+
         // ========== group="Zeichensatz einstellen (ohne EEPROM)" subcategory="beim Start"
 
-        //% group="Zeichensatz einstellen (ohne EEPROM)" subcategory="beim Start"
+        //% group="wenn kein EEPROM vorhanden (Zeichensatz im Speicher)" subcategory="beim Start"
         //% block="Zeichen 8x8 %OLEDtext %p_8x8" weight=4
         //% p_8x8.shadow="oled_new_oledarrays_8x8"
-        set_oledarrays_8x8(p_8x8: oledarrays_8x8) {
-            this.qOLEDArrays_8x8 = p_8x8
-            //this.qEEPROM_Startadresse_8x8 = eEEPROM_Startadresse.kein_EEPROM
-        }
+        set_oledarrays_8x8(p_8x8: oledarrays_8x8) { this.qOLEDArrays_8x8 = p_8x8 }
 
-        //% group="Zeichensatz einstellen (ohne EEPROM)" subcategory="beim Start"
+        //% group="wenn kein EEPROM vorhanden (Zeichensatz im Speicher)" subcategory="beim Start"
         //% block="Zeichen 5x5 %OLEDtext %p_5x5" weight=3
         //% p_5x5.shadow="oled_new_oledarrays_5x5"
-        set_oledarrays_5x5(p_5x5: oledarrays_5x5) {
-            this.qOLEDArrays_5x5 = p_5x5
-            //this.qEEPROM_Startadresse_5x5 = eEEPROM_Startadresse.kein_EEPROM
-        }
+        set_oledarrays_5x5(p_5x5: oledarrays_5x5) { this.qOLEDArrays_5x5 = p_5x5 }
 
 
         // ========== group="Zeichensatz einstellen (mit EEPROM)" subcategory="beim Start"
 
-        //% group="Zeichensatz einstellen (mit EEPROM)" subcategory="beim Start"
+        //% group="Blöcke nur verwenden, um Standardwerte zu ändern" subcategory="beim Start"
         //% block="Zeichen 8x8 %OLEDtext %pEEPROM_Startadresse_8x8 || i2c %pEEPROM_i2cADDR" weight=4
         //% pEEPROM_Startadresse_8x8.shadow=oled_eEEPROM_Startadresse
         //% pEEPROM_Startadresse_8x8.defl=oled.eEEPROM_Startadresse.F800
@@ -195,7 +295,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
             //if (pEEPROM_i2cADDR != undefined) this.i2cADDR_EEPROM = pEEPROM_i2cADDR
         }
 
-        //% group="Zeichensatz einstellen (mit EEPROM)" subcategory="beim Start"
+        //% group="Blöcke nur verwenden, um Standardwerte zu ändern" subcategory="beim Start"
         //% block="Zeichen 5x5 %OLEDtext %pEEPROM_Startadresse_5x5 || i2c %pEEPROM_i2cADDR" weight=2
         //% pEEPROM_Startadresse_5x5.shadow=oled_eEEPROM_Startadresse
         //% pEEPROM_Startadresse_5x5.defl=oled.eEEPROM_Startadresse.EC00
@@ -211,7 +311,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         // ========== group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
 
 
-        //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
+        //% group="OLED Display"
         //% block="Display %OLEDtext löschen || von Zeile %vonZeile bis Zeile %bisZeile mit Bitmuster %charcode" weight=2
         //% pADDR.shadow="oled_eADDR"
         //% vonZeile.min=0 vonZeile.max=7 vonZeile.defl=0
@@ -232,92 +332,6 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
                     this.i2cWriteBuffer_OLED(bu, page < bisZeile) // Clear Screen
                 }
                 control.waitMicros(100000) // 100ms Delay Recommended
-            }
-        }
-
-
-        // ========== group="Text 16x8 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
-
-        //% group="Text 16x8 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
-        //% block="16x8 %OLEDtext Text Zeile %row von %col bis %end %pText || %pAlign" weight=8
-        //% row.min=0 row.max=7 col.min=0 col.max=15 end.min=0 end.max=15 end.defl=15
-        //% pText.shadow="oled_text"
-        //% pAlign.defl=0
-        //% inlineInputMode=inline
-        writeText16x8(row: number, col: number, end: number, pText: any, pAlign?: eAlign) {
-            let text: string = convertToText(pText)
-            let len: number = end - col + 1
-            if (between(row, 0, 7) && between(col, 0, 15) && between(len, 0, 16)) {
-
-                if (text.length > len)
-                    text = text.substr(0, len)
-                else if (text.length < len && pAlign == eAlign.rechts)
-                    text = "                ".substr(0, len - text.length) + text
-                else if (text.length < len)
-                    text = text + "                ".substr(0, len - text.length)
-                // else { } // Original Text text.length == len
-
-                let bu = Buffer.create(7 + text.length * 8)
-                let offset = this.setCursorBuffer6(bu, 0, row, col) // setCursor
-
-                this.writeTextBuffer(bu, offset, text)
-            }
-        }
-
-        //% group="Text 16x8 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
-        //% block="16x8 %OLEDtext Cursor Zeile %row von %col" weight=6
-        //% row.min=0 row.max=7 col.min=0 col.max=15
-        setCursor(row: number, col: number) {
-            if (between(row, 0, 7) && between(col, 0, 15)) {
-                let bu = Buffer.create(6)
-                this.setCursorBuffer6(bu, 0, row, col)
-                this.i2cWriteBuffer_OLED(bu)
-                control.waitMicros(50)
-            }
-        }
-
-        //% group="Text 16x8 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
-        //% block="16x8 %OLEDtext Text ab Cursor %pText" weight=4
-        //% pText.shadow="oled_text"
-        writeText(pText: any) {
-            let text: string = convertToText(pText)
-            this.writeTextBuffer(Buffer.create(1 + text.length * 8), 0, text)
-        }
-
-
-
-        // ========== group="Text 8x16 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
-
-        //% group="Text 8x16 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
-        //% block="8x16 %OLEDtext Text Zeile %row von %col bis %end %pText || %pAlign" weight=7
-        //% row.min=0 row.max=15 col.min=0 col.max=7 end.min=0 end.max=7 end.defl=7
-        //% pText.shadow="oled_text"
-        //% pAlign.defl=0
-        //% inlineInputMode=inline
-        writeText8x16(row: number, col: number, end: number, pText: any, pAlign?: eAlign) {
-            let text: string = convertToText(pText)
-            let len: number = end - col + 1
-            if (between(row, 0, 15) && between(col, 0, 7) && between(len, 0, 8)) {
-
-                if (text.length > len)
-                    text = text.substr(0, len)
-                else if (text.length < len && pAlign == eAlign.rechts)
-                    text = "        ".substr(0, len - text.length) + text
-                else if (text.length < len)
-                    text = text + "        ".substr(0, len - text.length)
-                // else { } // Original Text text.length == len
-
-                let bu = Buffer.create(7 + 8) // 7 CONTROL+command + 8 text
-                let offset = this.setCursorBuffer6(bu, 0, 7 - col, row) // setCursor
-                bu.setUint8(offset++, eCONTROL.x40_Data) // CONTROL Byte 0x40: Display Data
-
-                for (let j = 0; j < text.length; j++) {
-                    bu.setUint8(1, 0xB0 | (7 - (col + j)) & 0x07)      // page number 7-0 B7-B0
-                    bu.write(8, this.getPixel_8x8(text.charCodeAt(j)))
-
-                    this.i2cWriteBuffer_OLED(bu)
-                }
-                control.waitMicros(50)
             }
         }
 
