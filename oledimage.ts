@@ -8,9 +8,8 @@ Weiterentwicklung der Erweiterung von M.Klein:
 neu programmiert von Lutz Elßner im November 2023
 */ {
 
-
-    //% subcategory=Bilder
-    //% block="Bild8x8" weight=4
+    //% group="Matrix" subcategory=Bilder
+    //% block="Bild 8x8" weight=4
     //% imageLiteral=1 imageLiteralColumns=8 imageLiteralRows=8
     //% shim=images::createImage
     export function matrix8x8(i: string): Image {
@@ -18,8 +17,8 @@ neu programmiert von Lutz Elßner im November 2023
         return im
     }
 
-    //% subcategory=Bilder
-    //% block="Bild16x16" weight=2
+    //% group="Matrix" subcategory=Bilder
+    //% block="Bild 16x16" weight=2
     //% imageLiteral=1 imageLiteralColumns=16 imageLiteralRows=16
     //% shim=images::createImage
     export function matrix16x16(i: string): Image {
