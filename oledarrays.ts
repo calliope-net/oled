@@ -1,5 +1,5 @@
 
-namespace oledssd1315 {
+namespace oled {
 
     let x20: string[], x30: string[], x40: string[], x50: string[], x60: string[], x70: string[]
 

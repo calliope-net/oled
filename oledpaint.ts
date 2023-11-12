@@ -1,5 +1,5 @@
 
-namespace oledssd1315
+namespace oled
 /*
 Weiterentwicklung der Idee von M.Klein:
     https://github.com/MKleinSB/pxt-OLEDpaint

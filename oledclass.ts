@@ -1,6 +1,6 @@
 
 //% color=#0000BF icon="\uf108" block="OLED 16x8" weight=20
-namespace oledssd1315
+namespace oled
 /* 230908 231103 https://github.com/calliope-net/oled-16x8
 
 Grove - OLED Yellow&Blue Display 0.96(SSD1315)
