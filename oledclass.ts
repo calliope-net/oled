@@ -53,12 +53,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
     export class oledclass {
         private readonly i2cADDR: eADDR_OLED
         private readonly i2cCheck: boolean // i2c-Check
-        private i2cError_OLED: number = 0 // Fehlercode vom letzten WriteBuffer (0 ist kein Fehler)
-        // EEPROM
-        //private i2cADDR_EEPROM = eADDR_EEPROM.EEPROM_x50
-        //private i2cError_EEPROM: number = 0
-        //private qEEPROM_Startadresse_8x8 = eEEPROM_Startadresse.F800
-        //private qEEPROM_Startadresse_5x5 = eEEPROM_Startadresse.EC00
+        private i2cError: number = 0 // Fehlercode vom letzten WriteBuffer (0 ist kein Fehler)
 
         private qZeichenDrehen: eZeichenDrehen = eZeichenDrehen.nicht
         // class
@@ -66,17 +61,16 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         private qOLEDArrays_8x8: oledarrays_8x8
         private qOLEDArrays_5x5: oledarrays_5x5
 
-
         constructor(pADDR: number, pInvert: boolean, pFlip: boolean, ck: boolean) {
             this.i2cADDR = pADDR
             this.i2cCheck = ck
-            this.i2cError_OLED = 0 // Reset Fehlercode
+            this.i2cError = 0 // Reset Fehlercode
             this.init(pInvert, pFlip)
         }
 
 
 
-        // ========== group="Text 16x8 anzeigen (Zeichensatz muss im EEPROM programmiert sein)"
+        // ========== group="Text 16x8 anzeigen"
 
         //% group="Text 16x8 anzeigen"
         //% block="16x8 %OLEDtext Text Zeile %row von %col bis %end %pText || %pAlign" weight=8
@@ -163,10 +157,38 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
 
 
-
         // ========== group="OLED Display"
 
+
         //% group="OLED Display"
+        //% block="Display %OLEDtext löschen || von Zeile %vonZeile bis Zeile %bisZeile mit Bitmuster %charcode" weight=2
+        //% vonZeile.min=0 vonZeile.max=7 vonZeile.defl=0
+        //% bisZeile.min=0 bisZeile.max=7 bisZeile.defl=7
+        //% charcode.min=0 charcode.max=255 charcode.defl=0
+        //% inlineInputMode=inline
+        clearScreen(vonZeile?: number, bisZeile?: number, charcode?: number) {
+            if (between(vonZeile, 0, 7) && between(bisZeile, 0, 7)) {
+                let bu = Buffer.create(135)
+                let offset = this.setCursorBuffer6(bu, 0, 0, 0)
+                bu.setUint8(offset++, eCONTROL.x40_Data) // CONTROL+DisplayData
+                bu.fill(charcode & 0xFF, offset++, 128)   // 128 Byte füllen eine Zeile pixelweise
+
+                for (let page = vonZeile; page <= bisZeile; page++) {
+                    bu.setUint8(1, 0xB0 | page) // an offset=1 steht die page number (Zeile 0-7)
+                    // sendet den selben Buffer 8 Mal mit Änderung an 1 Byte
+                    // true gibt den i2c Bus dazwischen nicht für andere Geräte frei
+                    this.i2cWriteBuffer_OLED(bu, page < bisZeile) // Clear Screen
+                }
+                control.waitMicros(100000) // 100ms Delay Recommended
+            }
+        }
+
+
+
+
+        // ========== group="OLED Display" advanced=true
+
+        //% group="OLED Display" advanced=true
         //% block="Display %OLEDtext initialisieren || invert %pInvert drehen %pFlip" weight=6
         //% pInvert.shadow="toggleOnOff" pInvert.defl=false
         //% pFlip.shadow="toggleOnOff" pFlip.defl=false
@@ -308,34 +330,6 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         }
 
 
-        // ========== group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
-
-
-        //% group="OLED Display"
-        //% block="Display %OLEDtext löschen || von Zeile %vonZeile bis Zeile %bisZeile mit Bitmuster %charcode" weight=2
-        //% pADDR.shadow="oled_eADDR"
-        //% vonZeile.min=0 vonZeile.max=7 vonZeile.defl=0
-        //% bisZeile.min=0 bisZeile.max=7 bisZeile.defl=7
-        //% charcode.min=0 charcode.max=255 charcode.defl=0
-        //% inlineInputMode=inline
-        clearScreen(vonZeile?: number, bisZeile?: number, charcode?: number) {
-            if (between(vonZeile, 0, 7) && between(bisZeile, 0, 7)) {
-                let bu = Buffer.create(135)
-                let offset = this.setCursorBuffer6(bu, 0, 0, 0)
-                bu.setUint8(offset++, eCONTROL.x40_Data) // CONTROL+DisplayData
-                bu.fill(charcode & 0xFF, offset++, 128)   // 128 Byte füllen eine Zeile pixelweise
-
-                for (let page = vonZeile; page <= bisZeile; page++) {
-                    bu.setUint8(1, 0xB0 | page) // an offset=1 steht die page number (Zeile 0-7)
-                    // sendet den selben Buffer 8 Mal mit Änderung an 1 Byte
-                    // true gibt den i2c Bus dazwischen nicht für andere Geräte frei
-                    this.i2cWriteBuffer_OLED(bu, page < bisZeile) // Clear Screen
-                }
-                control.waitMicros(100000) // 100ms Delay Recommended
-            }
-        }
-
-
 
         // ========== advanced=true
 
@@ -403,7 +397,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
         //% group="i2c Fehlercode" advanced=true
         //% block="%OLEDtext i2c Fehlercode OLED" weight=4
-        geti2cError_OLED() { return this.i2cError_OLED }
+        geti2cError_OLED() { return this.i2cError }
 
         //% group="i2c Fehlercode" advanced=true
         //% block="%OLEDtext i2c Fehlercode EEPROM" weight=2
@@ -491,12 +485,12 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
          */
 
         protected i2cWriteBuffer_OLED(buf: Buffer, repeat: boolean = false) {
-            if (this.i2cError_OLED == 0) { // vorher kein Fehler
-                this.i2cError_OLED = pins.i2cWriteBuffer(this.i2cADDR, buf, repeat)
-                if (this.i2cCheck && this.i2cError_OLED != 0)  // vorher kein Fehler, wenn (n_i2cCheck=true): beim 1. Fehler anzeigen
+            if (this.i2cError == 0) { // vorher kein Fehler
+                this.i2cError = pins.i2cWriteBuffer(this.i2cADDR, buf, repeat)
+                if (this.i2cCheck && this.i2cError != 0)  // vorher kein Fehler, wenn (n_i2cCheck=true): beim 1. Fehler anzeigen
                     basic.showString(Buffer.fromArray([this.i2cADDR]).toHex()) // zeige fehlerhafte i2c-Adresse als HEX
             } else if (!this.i2cCheck)  // vorher Fehler, aber ignorieren (n_i2cCheck=false): i2c weiter versuchen
-                this.i2cError_OLED = pins.i2cWriteBuffer(this.i2cADDR, buf, repeat)
+                this.i2cError = pins.i2cWriteBuffer(this.i2cADDR, buf, repeat)
             //else { } // n_i2cCheck=true und n_i2cError != 0: weitere i2c Aufrufe blockieren
         }
 
