@@ -1,8 +1,7 @@
 
-namespace oled 
+namespace oled
 /*
-*/
-{
+*/ {
 
     // ========== blockId=oled_ === für pADDR.shadow="oled_eADDR_OLED"
 
@@ -71,11 +70,13 @@ namespace oled
         rechts
     }
 
+    export enum eSegment { A, B, C, D, E, F, G } // 7-Segment-Anzeige
+
 
     export function between(i0: number, i1: number, i2: number): boolean { return (i0 >= i1 && i0 <= i2) }
 
 
-    export  function drehen(b0: Buffer, pDrehen: eZeichenDrehen) { // Buffer mit 8 Byte
+    export function drehen(b0: Buffer, pDrehen: eZeichenDrehen) { // Buffer mit 8 Byte
         let b1 = Buffer.create(8)
         b1.fill(0b00000000)
 

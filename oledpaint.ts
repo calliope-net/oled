@@ -43,7 +43,7 @@ neu programmiert von Lutz Elßner im November 2023
         // ========== group="direkt auf Display zeichnen" subcategory=zeichnen
 
         //% group="direkt auf Display zeichnen" subcategory=zeichnen
-        //% block="Display %OLEDpaint löschen || von Zeile %vonZeile bis Zeile %bisZeile mit Bitmuster %charcode" weight=9
+        //% block="Display %OLEDpaint löschen || von Zeile %vonZeile bis Zeile %bisZeile mit Bitmuster 0↓255 %byte" weight=9
         //% vonZeile.min=0 vonZeile.max=7 vonZeile.defl=0
         //% bisZeile.min=0 bisZeile.max=7 bisZeile.defl=7
         //% byte.min=0 byte.max=255 byte.defl=0
@@ -66,15 +66,15 @@ neu programmiert von Lutz Elßner im November 2023
                     this.drawnum(parseFloat(zahlAlsText.substr(Index, 1)), Index + 4 - zahlAlsText.length)
                 }
             } else { //Errormessage
-                this.drawsegment("A", 0)
-                this.drawsegment("D", 0)
-                this.drawsegment("E", 0)
-                this.drawsegment("F", 0)
-                this.drawsegment("G", 0)
-                this.drawsegment("E", 32)
-                this.drawsegment("G", 32)
-                this.drawsegment("E", 64)
-                this.drawsegment("G", 64)
+                this.drawsegment(eSegment.A, 0)
+                this.drawsegment(eSegment.D, 0)
+                this.drawsegment(eSegment.E, 0)
+                this.drawsegment(eSegment.F, 0)
+                this.drawsegment(eSegment.G, 0)
+                this.drawsegment(eSegment.E, 32)
+                this.drawsegment(eSegment.G, 32)
+                this.drawsegment(eSegment.E, 64)
+                this.drawsegment(eSegment.G, 64)
             }
             this.sendBuffer() // anzeigen
         }
@@ -95,125 +95,147 @@ neu programmiert von Lutz Elßner im November 2023
 
 
 
-        // ========== group="Buffer"
+        // ========== group="in den Buffer zeichnen (dann 'Buffer anzeigen' verwenden)" subcategory=zeichnen
 
 
-
-        //% group="Buffer" subcategory=zeichnen
-        //% block="zeichne %OLEDpaint Ziffer %num an Position %pos" weight=6
-        //% num.min=0 num.max=9999 pos.min=0 pos.max=3
-        drawnum(num: number, pos: number) {
-            switch (pos) {
-                case 0: {
-                    pos = 0
-                    break
-                }
-                case 1: {
-                    pos = 32
-                    break
-                }
-                case 2: {
-                    pos = 64
-                    break
-                }
-                case 3: {
-                    pos = 96
-                    break
-                }
-            }
-            switch (num) {
-                case 0: {
-                    this.drawsegment("A", pos)
-                    this.drawsegment("B", pos)
-                    this.drawsegment("C", pos)
-                    this.drawsegment("D", pos)
-                    this.drawsegment("E", pos)
-                    this.drawsegment("F", pos)
-                    break
-                }
-                case 1: {
-                    this.drawsegment("B", pos)
-                    this.drawsegment("C", pos)
-                    break
-                }
-                case 2: {
-                    this.drawsegment("A", pos)
-                    this.drawsegment("B", pos)
-                    this.drawsegment("G", pos)
-                    this.drawsegment("E", pos)
-                    this.drawsegment("D", pos)
-                    break
-                }
-                case 3: {
-                    this.drawsegment("A", pos)
-                    this.drawsegment("B", pos)
-                    this.drawsegment("C", pos)
-                    this.drawsegment("D", pos)
-                    this.drawsegment("G", pos)
-                    break
-                }
-                case 4: {
-                    this.drawsegment("B", pos)
-                    this.drawsegment("C", pos)
-                    this.drawsegment("F", pos)
-                    this.drawsegment("G", pos)
-                    break
-                }
-                case 5: {
-                    this.drawsegment("A", pos)
-                    this.drawsegment("C", pos)
-                    this.drawsegment("D", pos)
-                    this.drawsegment("F", pos)
-                    this.drawsegment("G", pos)
-                    break
-                }
-                case 6: {
-                    this.drawsegment("A", pos)
-                    this.drawsegment("C", pos)
-                    this.drawsegment("D", pos)
-                    this.drawsegment("E", pos)
-                    this.drawsegment("F", pos)
-                    this.drawsegment("G", pos)
-                    break
-                }
-                case 7: {
-                    this.drawsegment("A", pos)
-                    this.drawsegment("B", pos)
-                    this.drawsegment("C", pos)
-                    break
-                }
-                case 8: {
-                    this.drawsegment("A", pos)
-                    this.drawsegment("B", pos)
-                    this.drawsegment("C", pos)
-                    this.drawsegment("D", pos)
-                    this.drawsegment("E", pos)
-                    this.drawsegment("F", pos)
-                    this.drawsegment("G", pos)
-                    break
-                }
-                case 9: {
-                    this.drawsegment("A", pos)
-                    this.drawsegment("B", pos)
-                    this.drawsegment("C", pos)
-                    this.drawsegment("D", pos)
-                    this.drawsegment("F", pos)
-                    this.drawsegment("G", pos)
-                    break
-                }
-            }
-        }
-
-
-        // ========== group="Buffer"
-
-        //% group="Buffer" subcategory=zeichnen
-        //% block="löschen %OLEDpaint || mit Bitmuster 0↓255 %byte" weight=6
+        //% group="in den Buffer zeichnen (dann 'Buffer anzeigen' verwenden)" subcategory=zeichnen
+        //% block="Buffer %OLEDpaint löschen || von Zeile %vonZeile bis Zeile %bisZeile mit Bitmuster 0↓255 %byte" weight=9
+        //% vonZeile.min=0 vonZeile.max=7 vonZeile.defl=0
+        //% bisZeile.min=0 bisZeile.max=7 bisZeile.defl=7
         //% byte.min=0 byte.max=255 byte.defl=0
-        clearBuffer(byte?: number) {
-            for (let page = 0; page < this.qBuffer.length; page++)
-                this.qBuffer.get(page).fill(byte)// & 0xFF, this.qOffset)
+        clearBuffer(vonZeile?: number, bisZeile?: number, byte?: number) {
+            for (let page = vonZeile; page <= bisZeile; page++)
+                this.qBuffer.get(page).fill(byte & 0xFF, this.qOffset)
         }
+
+
+        //% group="in den Buffer zeichnen (dann 'Buffer anzeigen' verwenden)" subcategory=zeichnen
+        //% block="Buffer %OLEDpaint 7-Segment Ziffer %num an Position (0-3) %pos" weight=8
+        //% num.min=0 num.max=9 pos.min=0 pos.max=3
+        drawnum(num: number, pos: number) {
+            if (between(num, 0, 9) && between(pos, 0, 3)) {
+                pos = pos * 32
+                /* switch (pos) {
+                    case 0: {
+                        pos = 0
+                        break
+                    }
+                    case 1: {
+                        pos = 32
+                        break
+                    }
+                    case 2: {
+                        pos = 64
+                        break
+                    }
+                    case 3: {
+                        pos = 96
+                        break
+                    }
+                } */
+                switch (num) {
+                    case 0: {
+                        this.drawsegment(eSegment.A, pos)
+                        this.drawsegment(eSegment.B, pos)
+                        this.drawsegment(eSegment.C, pos)
+                        this.drawsegment(eSegment.D, pos)
+                        this.drawsegment(eSegment.E, pos)
+                        this.drawsegment(eSegment.F, pos)
+                        break
+                    }
+                    case 1: {
+                        this.drawsegment(eSegment.B, pos)
+                        this.drawsegment(eSegment.C, pos)
+                        break
+                    }
+                    case 2: {
+                        this.drawsegment(eSegment.A, pos)
+                        this.drawsegment(eSegment.B, pos)
+                        this.drawsegment(eSegment.G, pos)
+                        this.drawsegment(eSegment.E, pos)
+                        this.drawsegment(eSegment.D, pos)
+                        break
+                    }
+                    case 3: {
+                        this.drawsegment(eSegment.A, pos)
+                        this.drawsegment(eSegment.B, pos)
+                        this.drawsegment(eSegment.C, pos)
+                        this.drawsegment(eSegment.D, pos)
+                        this.drawsegment(eSegment.G, pos)
+                        break
+                    }
+                    case 4: {
+                        this.drawsegment(eSegment.B, pos)
+                        this.drawsegment(eSegment.C, pos)
+                        this.drawsegment(eSegment.F, pos)
+                        this.drawsegment(eSegment.G, pos)
+                        break
+                    }
+                    case 5: {
+                        this.drawsegment(eSegment.A, pos)
+                        this.drawsegment(eSegment.C, pos)
+                        this.drawsegment(eSegment.D, pos)
+                        this.drawsegment(eSegment.F, pos)
+                        this.drawsegment(eSegment.G, pos)
+                        break
+                    }
+                    case 6: {
+                        this.drawsegment(eSegment.A, pos)
+                        this.drawsegment(eSegment.C, pos)
+                        this.drawsegment(eSegment.D, pos)
+                        this.drawsegment(eSegment.E, pos)
+                        this.drawsegment(eSegment.F, pos)
+                        this.drawsegment(eSegment.G, pos)
+                        break
+                    }
+                    case 7: {
+                        this.drawsegment(eSegment.A, pos)
+                        this.drawsegment(eSegment.B, pos)
+                        this.drawsegment(eSegment.C, pos)
+                        break
+                    }
+                    case 8: {
+                        this.drawsegment(eSegment.A, pos)
+                        this.drawsegment(eSegment.B, pos)
+                        this.drawsegment(eSegment.C, pos)
+                        this.drawsegment(eSegment.D, pos)
+                        this.drawsegment(eSegment.E, pos)
+                        this.drawsegment(eSegment.F, pos)
+                        this.drawsegment(eSegment.G, pos)
+                        break
+                    }
+                    case 9: {
+                        this.drawsegment(eSegment.A, pos)
+                        this.drawsegment(eSegment.B, pos)
+                        this.drawsegment(eSegment.C, pos)
+                        this.drawsegment(eSegment.D, pos)
+                        this.drawsegment(eSegment.F, pos)
+                        this.drawsegment(eSegment.G, pos)
+                        break
+                    }
+                }
+            }
+        }
+
+
+        //% group="in den Buffer zeichnen (dann 'Buffer anzeigen' verwenden)" subcategory=zeichnen
+        //% block="Buffer %OLEDpaint einzelnes Segment %seg an Position %pos" weight=7
+        //% pos.min=0 pos.max=3
+        drawsegment(seg: eSegment, pos: number) {
+            switch (seg) {
+                case eSegment.A: { this.writeImageOLED(quer, pos + 4, 0); break }
+                case eSegment.F: { this.writeImageOLED(hoch, pos, 4); break }
+                case eSegment.E: { this.writeImageOLED(hoch, pos, 29); break }
+                case eSegment.G: { this.writeImageOLED(quer, pos + 4, 25); break }
+                case eSegment.B: { this.writeImageOLED(hoch, pos + 24, 4); break }
+                case eSegment.C: { this.writeImageOLED(hoch, pos + 24, 29); break }
+                case eSegment.D: { this.writeImageOLED(quer, pos + 4, 50); break }
+            }
+        }
+
+
+
+        // ========== group="Buffer"
 
         //% group="Buffer" subcategory=zeichnen
         //% block="zeichnen %OLEDpaint Zeile 0↓7 %page Segment 0→127 %seg Bitmuster 0↓255 %byte" weight=4
@@ -249,43 +271,6 @@ neu programmiert von Lutz Elßner im November 2023
             let seg = this.qOffset + x
             let screenPixel = (bu[seg] | (1 << shift_page))  //set the screen data byte
             bu[seg] = screenPixel                            //store data in screen buffer
-        }
-
-
-
-        //% group="Image" subcategory=zeichnen
-        //% block="zeichne %OLEDpaint Segment %seg an Position %pos" weight=7
-        drawsegment(seg: string, pos: number) {
-            switch (seg) {
-                case "A": {
-                    this.writeImageOLED(quer, pos + 4, 0)
-                    break
-                }
-                case "F": {
-                    this.writeImageOLED(hoch, pos, 4)
-                    break
-                }
-                case "E": {
-                    this.writeImageOLED(hoch, pos, 29)
-                    break
-                }
-                case "G": {
-                    this.writeImageOLED(quer, pos + 4, 25)
-                    break
-                }
-                case "B": {
-                    this.writeImageOLED(hoch, pos + 24, 4)
-                    break
-                }
-                case "C": {
-                    this.writeImageOLED(hoch, pos + 24, 29)
-                    break
-                }
-                case "D": {
-                    this.writeImageOLED(quer, pos + 4, 50)
-                    break
-                }
-            }
         }
 
 
