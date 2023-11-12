@@ -157,10 +157,14 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
 
 
-        // ========== group="OLED Display"
+        // ========== group="Display"
 
 
-        //% group="OLED Display"
+        //% group="Display"
+        //% block="Zeichen %OLEDtext %pZeichenDrehen" weight=4
+        zeichenDrehen(pZeichenDrehen: eZeichenDrehen) { this.qZeichenDrehen = pZeichenDrehen }
+
+        //% group="Display"
         //% block="Display %OLEDtext löschen || von Zeile %vonZeile bis Zeile %bisZeile mit Bitmuster %charcode" weight=2
         //% vonZeile.min=0 vonZeile.max=7 vonZeile.defl=0
         //% bisZeile.min=0 bisZeile.max=7 bisZeile.defl=7
@@ -186,10 +190,57 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
 
 
-        // ========== group="OLED Display" advanced=true
+        // ========== subcategory="beim Start" ==========
 
-        //% group="OLED Display" advanced=true
-        //% block="Display %OLEDtext initialisieren || invert %pInvert drehen %pFlip" weight=6
+
+        // ========== group="Zeichensatz einstellen (ohne EEPROM)" subcategory="beim Start"
+
+        //% group="wenn kein EEPROM vorhanden (Zeichensatz im Speicher)" subcategory="beim Start"
+        //% block="Zeichen 8x8 %OLEDtext %p_8x8" weight=4
+        //% p_8x8.shadow="oled_new_oledarrays_8x8"
+        set_oledarrays_8x8(p_8x8: oledarrays_8x8) { this.qOLEDArrays_8x8 = p_8x8 }
+
+        //% group="wenn kein EEPROM vorhanden (Zeichensatz im Speicher)" subcategory="beim Start"
+        //% block="Zeichen 5x5 %OLEDtext %p_5x5" weight=3
+        //% p_5x5.shadow="oled_new_oledarrays_5x5"
+        set_oledarrays_5x5(p_5x5: oledarrays_5x5) { this.qOLEDArrays_5x5 = p_5x5 }
+
+
+        // ========== group="Zeichensatz einstellen (mit EEPROM)" subcategory="beim Start"
+
+        //% group="Blöcke nur verwenden, um Standardwerte zu ändern" subcategory="beim Start"
+        //% block="Zeichen 8x8 %OLEDtext %pEEPROM_Startadresse_8x8 || i2c %pEEPROM_i2cADDR" weight=4
+        //% pEEPROM_Startadresse_8x8.shadow=oled_eEEPROM_Startadresse
+        //% pEEPROM_Startadresse_8x8.defl=oled.eEEPROM_Startadresse.F800
+        //% pEEPROM_i2cADDR.shadow=oled_eADDR_EEPROM
+        set_eeprom_8x8(pEEPROM_Startadresse_8x8: number, pEEPROM_i2cADDR?: number) { // pEEPROM_i2cADDR.defl funktioniert nicht
+            if (this.qOLEDeeprom == null)
+                this.qOLEDeeprom = new oledeeprom(pEEPROM_i2cADDR, this.i2cCheck)
+            this.qOLEDeeprom.qEEPROM_Startadresse_8x8 = pEEPROM_Startadresse_8x8
+            //if (pEEPROM_i2cADDR != undefined) this.i2cADDR_EEPROM = pEEPROM_i2cADDR
+        }
+
+        //% group="Blöcke nur verwenden, um Standardwerte zu ändern" subcategory="beim Start"
+        //% block="Zeichen 5x5 %OLEDtext %pEEPROM_Startadresse_5x5 || i2c %pEEPROM_i2cADDR" weight=2
+        //% pEEPROM_Startadresse_5x5.shadow=oled_eEEPROM_Startadresse
+        //% pEEPROM_Startadresse_5x5.defl=oled.eEEPROM_Startadresse.EC00
+        //% pEEPROM_i2cADDR.shadow=oled_eADDR_EEPROM
+        set_eeprom_5x5(pEEPROM_Startadresse_5x5: number, pEEPROM_i2cADDR?: number) { // pEEPROM_i2cADDR.defl funktioniert nicht
+            if (this.qOLEDeeprom == null)
+                this.qOLEDeeprom = new oledeeprom(pEEPROM_i2cADDR, this.i2cCheck)
+            this.qOLEDeeprom.qEEPROM_Startadresse_5x5 = pEEPROM_Startadresse_5x5
+            //if (pEEPROM_i2cADDR != undefined) this.i2cADDR_EEPROM = pEEPROM_i2cADDR
+        }
+
+
+
+        // ========== advanced=true ==========
+
+
+        // ========== group="Display Command" advanced=true
+
+        //% group="Display Command" advanced=true
+        //% block="Display %OLEDtext initialisieren || invert %pInvert drehen %pFlip" weight=8
         //% pInvert.shadow="toggleOnOff" pInvert.defl=false
         //% pFlip.shadow="toggleOnOff" pFlip.defl=false
         init(pInvert?: boolean, pFlip?: boolean): void {
@@ -286,54 +337,24 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         }
 
 
-
-        // ========== subcategory="beim Start" ==========
-
-
-        // ========== group="Zeichensatz einstellen (ohne EEPROM)" subcategory="beim Start"
-
-        //% group="wenn kein EEPROM vorhanden (Zeichensatz im Speicher)" subcategory="beim Start"
-        //% block="Zeichen 8x8 %OLEDtext %p_8x8" weight=4
-        //% p_8x8.shadow="oled_new_oledarrays_8x8"
-        set_oledarrays_8x8(p_8x8: oledarrays_8x8) { this.qOLEDArrays_8x8 = p_8x8 }
-
-        //% group="wenn kein EEPROM vorhanden (Zeichensatz im Speicher)" subcategory="beim Start"
-        //% block="Zeichen 5x5 %OLEDtext %p_5x5" weight=3
-        //% p_5x5.shadow="oled_new_oledarrays_5x5"
-        set_oledarrays_5x5(p_5x5: oledarrays_5x5) { this.qOLEDArrays_5x5 = p_5x5 }
-
-
-        // ========== group="Zeichensatz einstellen (mit EEPROM)" subcategory="beim Start"
-
-        //% group="Blöcke nur verwenden, um Standardwerte zu ändern" subcategory="beim Start"
-        //% block="Zeichen 8x8 %OLEDtext %pEEPROM_Startadresse_8x8 || i2c %pEEPROM_i2cADDR" weight=4
-        //% pEEPROM_Startadresse_8x8.shadow=oled_eEEPROM_Startadresse
-        //% pEEPROM_Startadresse_8x8.defl=oled.eEEPROM_Startadresse.F800
-        //% pEEPROM_i2cADDR.shadow=oled_eADDR_EEPROM
-        set_eeprom_8x8(pEEPROM_Startadresse_8x8: number, pEEPROM_i2cADDR?: number) { // pEEPROM_i2cADDR.defl funktioniert nicht
-            if (this.qOLEDeeprom == null)
-                this.qOLEDeeprom = new oledeeprom(pEEPROM_i2cADDR, this.i2cCheck)
-            this.qOLEDeeprom.qEEPROM_Startadresse_8x8 = pEEPROM_Startadresse_8x8
-            //if (pEEPROM_i2cADDR != undefined) this.i2cADDR_EEPROM = pEEPROM_i2cADDR
-        }
-
-        //% group="Blöcke nur verwenden, um Standardwerte zu ändern" subcategory="beim Start"
-        //% block="Zeichen 5x5 %OLEDtext %pEEPROM_Startadresse_5x5 || i2c %pEEPROM_i2cADDR" weight=2
-        //% pEEPROM_Startadresse_5x5.shadow=oled_eEEPROM_Startadresse
-        //% pEEPROM_Startadresse_5x5.defl=oled.eEEPROM_Startadresse.EC00
-        //% pEEPROM_i2cADDR.shadow=oled_eADDR_EEPROM
-        set_eeprom_5x5(pEEPROM_Startadresse_5x5: number, pEEPROM_i2cADDR?: number) { // pEEPROM_i2cADDR.defl funktioniert nicht
-            if (this.qOLEDeeprom == null)
-                this.qOLEDeeprom = new oledeeprom(pEEPROM_i2cADDR, this.i2cCheck)
-            this.qOLEDeeprom.qEEPROM_Startadresse_5x5 = pEEPROM_Startadresse_5x5
-            //if (pEEPROM_i2cADDR != undefined) this.i2cADDR_EEPROM = pEEPROM_i2cADDR
+        //% group="Display Command" advanced=true
+        //% block="Display %OLEDtext Command %pDisplayCommand %pON" weight=6
+        //% pON.shadow="toggleOnOff"
+        displayCommand(pDisplayCommand: eDisplayCommand, pON: boolean) {
+            let bu = Buffer.create(2)
+            bu.setUint8(0, eCONTROL.x00_xCom)
+            switch (pDisplayCommand) {
+                case eDisplayCommand.ON: { bu.setUint8(1, (pON ? eCommand.AF_DISPLAY_ON : eCommand.AE_DISPLAY_OFF)); break; }
+                case eDisplayCommand.INVERS: { bu.setUint8(1, (pON ? eCommand.A7_INVERT_DISPLAY : eCommand.A6_NORMAL_DISPLAY)); break; }
+                case eDisplayCommand.FLIP: { bu.setUint8(1, (pON ? eCommand.A0_SEGMENT_REMAP : eCommand.A1_SEGMENT_REMAP)); break }
+                case eDisplayCommand.REMAP: { bu.setUint8(1, (pON ? eCommand.C0_COM_SCAN_INC : eCommand.C8_COM_SCAN_DEC)); break; }
+                case eDisplayCommand.ENTIRE_ON: { bu.setUint8(1, (pON ? eCommand.A4_ENTIRE_DISPLAY_ON : eCommand.A5_RAM_CONTENT_DISPLAY)); break; }
+            }
+            this.i2cWriteBuffer(bu)
         }
 
 
-
-        // ========== advanced=true
-
-        // ========== group="kopiert 1024 Byte vom EEPROM auf ein Display (Text, Bild)"
+        // ========== group="kopiert 1024 Byte vom EEPROM auf ein Display (Text, Bild)" advanced=true
 
         //% group="kopiert 1024 Byte vom EEPROM auf ein Display (Text, Bild)" advanced=true
         //% block="16x8 %OLEDtext Display füllen %pEEPROM_Startadresse || von Zeile %vonZeile bis Zeile %bisZeile"
@@ -368,29 +389,6 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
                 }
             }
         }
-
-
-        // ========== group="Display Command" advanced=true
-
-        //% group="Display Command" advanced=true
-        //% block="Display %OLEDtext Command %pDisplayCommand %pON" weight=6
-        //% pON.shadow="toggleOnOff"
-        displayCommand(pDisplayCommand: eDisplayCommand, pON: boolean) {
-            let bu = Buffer.create(2)
-            bu.setUint8(0, eCONTROL.x00_xCom)
-            switch (pDisplayCommand) {
-                case eDisplayCommand.ON: { bu.setUint8(1, (pON ? eCommand.AF_DISPLAY_ON : eCommand.AE_DISPLAY_OFF)); break; }
-                case eDisplayCommand.INVERS: { bu.setUint8(1, (pON ? eCommand.A7_INVERT_DISPLAY : eCommand.A6_NORMAL_DISPLAY)); break; }
-                case eDisplayCommand.FLIP: { bu.setUint8(1, (pON ? eCommand.A0_SEGMENT_REMAP : eCommand.A1_SEGMENT_REMAP)); break }
-                case eDisplayCommand.REMAP: { bu.setUint8(1, (pON ? eCommand.C0_COM_SCAN_INC : eCommand.C8_COM_SCAN_DEC)); break; }
-                case eDisplayCommand.ENTIRE_ON: { bu.setUint8(1, (pON ? eCommand.A4_ENTIRE_DISPLAY_ON : eCommand.A5_RAM_CONTENT_DISPLAY)); break; }
-            }
-            this.i2cWriteBuffer(bu)
-        }
-
-        //% group="Display Command" advanced=true
-        //% block="Zeichen %OLEDtext %pZeichenDrehen" weight=4
-        zeichenDrehen(pZeichenDrehen: eZeichenDrehen) { this.qZeichenDrehen = pZeichenDrehen }
 
 
         // ========== group="i2c Fehlercode" advanced=true
