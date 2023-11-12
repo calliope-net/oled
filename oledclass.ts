@@ -17,8 +17,9 @@ OLED Display mit EEPROM neu programmiert von Lutz Elßner im September 2023
 Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im November 2023
 */ {
 
-    //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit" weight=8
+    //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit" subcategory="beim Start"
     //% block="i2c %pADDR || invert %pInvert flip %pFlip i2c-Check %ck EEPROM: Zeichensatz %pEEPROM_Startadresse i2c %pEEPROM_i2cADDR"
+    //% weight=8
     //% pADDR.shadow="oled_eADDR_OLED"
     //% pInvert.shadow="toggleOnOff"
     //% pFlip.shadow="toggleOnOff"
@@ -45,14 +46,14 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
     // ========== class oledclass
 
     export class oledclass {
-        private readonly i2cADDR_OLED: number
+        private readonly i2cADDR_OLED: eADDR_OLED
         private readonly i2cCheck: boolean // i2c-Check
         private i2cError_OLED: number = 0 // Fehlercode vom letzten WriteBuffer (0 ist kein Fehler)
         // EEPROM
-        private i2cADDR_EEPROM: number
+        private i2cADDR_EEPROM: eADDR_EEPROM //= eADDR_EEPROM.EEPROM_x50
         private i2cError_EEPROM: number = 0
-        private qEEPROM_Startadresse_8x8: number
-        private qEEPROM_Startadresse_5x5: number
+        private qEEPROM_Startadresse_8x8: number = eEEPROM_Startadresse.kein_EEPROM
+        private qEEPROM_Startadresse_5x5: number = eEEPROM_Startadresse.kein_EEPROM
 
         private qZeichenDrehen: eZeichenDrehen = eZeichenDrehen.nicht
         private qOLEDArrays_8x8: oledarrays_8x8
@@ -174,19 +175,46 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
             control.waitMicros(100000) // 100ms Delay Recommended
         }
 
-        //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
+
+        // ========== group="Zeichensatz einstellen (ohne EEPROM)" subcategory="beim Start"
+
+        //% group="Zeichensatz einstellen (ohne EEPROM)" subcategory="beim Start"
         //% block="Zeichen 8x8 %OLED16x8 %p_8x8" weight=4
         //% p_8x8.shadow="oled_new_oledarrays_8x8"
         set_oledarrays_8x8(p_8x8: oledarrays_8x8) {
             this.qOLEDArrays_8x8 = p_8x8
         }
 
-        //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
+        //% group="Zeichensatz einstellen (ohne EEPROM)" subcategory="beim Start"
         //% block="Zeichen 5x5 %OLED16x8 %p_5x5" weight=3
         //% p_5x5.shadow="oled_new_oledarrays_5x5"
         set_oledarrays_5x5(p_5x5: oledarrays_5x5) {
             this.qOLEDArrays_5x5 = p_5x5
         }
+
+
+        // ========== group="Zeichensatz einstellen (mit EEPROM)" subcategory="beim Start"
+
+        //% group="Zeichensatz einstellen (mit EEPROM)" subcategory="beim Start"
+        //% block="Zeichen 8x8 %OLED16x8 %pEEPROM_Startadresse_8x8 || i2c %pEEPROM_i2cADDR" weight=4
+        //% pEEPROM_Startadresse_8x8.shadow=oled_eEEPROM_Startadresse
+        //% pEEPROM_Startadresse_8x8.defl=oled.eEEPROM_Startadresse.F800
+        //% pEEPROM_i2cADDR.shadow=oled_eADDR_EEPROM
+        set_eeprom_8x8(pEEPROM_Startadresse_8x8: number, pEEPROM_i2cADDR?: number) { // pEEPROM_i2cADDR.defl funktioniert nicht
+            this.qEEPROM_Startadresse_8x8 = pEEPROM_Startadresse_8x8
+            if (pEEPROM_i2cADDR != undefined) this.i2cADDR_EEPROM = pEEPROM_i2cADDR
+        }
+
+        //% group="Zeichensatz einstellen (mit EEPROM)" subcategory="beim Start"
+        //% block="Zeichen 5x5 %OLED16x8 %pEEPROM_Startadresse_5x5 || i2c %pEEPROM_i2cADDR" weight=4
+        //% pEEPROM_Startadresse_5x5.shadow=oled_eEEPROM_Startadresse
+        //% pEEPROM_Startadresse_5x5.defl=oled.eEEPROM_Startadresse.EC00
+        //% pEEPROM_i2cADDR.shadow=oled_eADDR_EEPROM
+        set_eeprom_5x5(pEEPROM_Startadresse_5x5: number, pEEPROM_i2cADDR?: number) { // pEEPROM_i2cADDR.defl funktioniert nicht
+            this.qEEPROM_Startadresse_5x5 = pEEPROM_Startadresse_5x5
+            if (pEEPROM_i2cADDR != undefined) this.i2cADDR_EEPROM = pEEPROM_i2cADDR
+        }
+
 
         // ========== group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
 
