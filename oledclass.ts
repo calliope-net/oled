@@ -18,25 +18,23 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 */ {
 
     //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit" subcategory="beim Start"
-    //% block="i2c %pADDR || invert %pInvert flip %pFlip i2c-Check %ck EEPROM: Zeichensatz %pEEPROM_Startadresse i2c %pEEPROM_i2cADDR"
+    //% block="i2c %pADDR nur Text || invert %pInvert flip %pFlip i2c-Check %ck"
     //% weight=8
     //% pADDR.shadow="oled_eADDR_OLED"
     //% pInvert.shadow="toggleOnOff"
     //% pFlip.shadow="toggleOnOff"
     //% ck.shadow="toggleOnOff" ck.defl=1
+
     //% pEEPROM_Startadresse_8x8.shadow="oled_eEEPROM_Startadresse"
     //% pEEPROM_Startadresse_5x5.shadow="oled_eEEPROM_Startadresse"
     //% pEEPROM_Startadresse_5x5.defl=oled.eEEPROM_Startadresse.EC00
     //% pEEPROM_i2cADDR.shadow="oled_eADDR_EEPROM"
+
     //% inlineInputMode=inline
     //% blockSetVariable=OLED16x8
-    export function new_oledclass(pADDR: number, pInvert?: boolean, pFlip?: boolean, ck?: boolean,
-        pEEPROM_Startadresse_8x8?: number, pEEPROM_Startadresse_5x5?: number, pEEPROM_i2cADDR?: number): oledclass {
+    export function new_oledclass(pADDR: number, pInvert?: boolean, pFlip?: boolean, ck?: boolean): oledclass {
 
-        return new oledclass(pADDR, (pInvert ? true : false), (pFlip ? true : false), (ck ? true : false),
-            (pEEPROM_Startadresse_8x8 == undefined ? eEEPROM_Startadresse.F800 : pEEPROM_Startadresse_8x8),
-            (pEEPROM_Startadresse_5x5 == undefined ? eEEPROM_Startadresse.EC00 : pEEPROM_Startadresse_5x5),
-            (pEEPROM_i2cADDR == undefined ? eADDR_EEPROM.EEPROM_x50 : pEEPROM_i2cADDR))
+        return new oledclass(pADDR, (pInvert ? true : false), (pFlip ? true : false), (ck ? true : false))
         // optionaler Parameter kann undefined sein
     }
 
@@ -60,19 +58,18 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         private qOLEDArrays_5x5: oledarrays_5x5
 
 
-        constructor(pADDR: number, pInvert: boolean, pFlip: boolean, ck: boolean,
-            pEEPROM_Startadresse_8x8: number, pEEPROM_Startadresse_5x5: number, pEEPROM_i2cADDR: number) {
+        constructor(pADDR: number, pInvert: boolean, pFlip: boolean, ck: boolean) {
 
             this.i2cADDR_OLED = pADDR
             this.i2cCheck = ck
-            this.qEEPROM_Startadresse_8x8 = pEEPROM_Startadresse_8x8
-            this.qEEPROM_Startadresse_5x5 = pEEPROM_Startadresse_5x5
-            this.i2cADDR_EEPROM = pEEPROM_i2cADDR
+            //this.qEEPROM_Startadresse_8x8 = pEEPROM_Startadresse_8x8
+            //this.qEEPROM_Startadresse_5x5 = pEEPROM_Startadresse_5x5
+            //this.i2cADDR_EEPROM = pEEPROM_i2cADDR
             this.i2cError_OLED = 0 // Reset Fehlercode
-            this.i2cError_EEPROM = 0 // Reset Fehlercode
+            //this.i2cError_EEPROM = 0 // Reset Fehlercode
 
             this.init(pInvert, pFlip)
-            this.getPixel8Byte(0x20)  // testet, ob EEPROM angeschlossen ist
+            //this.getPixel8Byte(0x20)  // testet, ob EEPROM angeschlossen ist
         }
 
 
@@ -206,7 +203,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         }
 
         //% group="Zeichensatz einstellen (mit EEPROM)" subcategory="beim Start"
-        //% block="Zeichen 5x5 %OLED16x8 %pEEPROM_Startadresse_5x5 || i2c %pEEPROM_i2cADDR" weight=4
+        //% block="Zeichen 5x5 %OLED16x8 %pEEPROM_Startadresse_5x5 || i2c %pEEPROM_i2cADDR" weight=2
         //% pEEPROM_Startadresse_5x5.shadow=oled_eEEPROM_Startadresse
         //% pEEPROM_Startadresse_5x5.defl=oled.eEEPROM_Startadresse.EC00
         //% pEEPROM_i2cADDR.shadow=oled_eADDR_EEPROM
