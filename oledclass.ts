@@ -17,7 +17,7 @@ OLED Display mit EEPROM neu programmiert von Lutz Elßner im September 2023
 Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im November 2023
 */ {
 
-    //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
+    //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit" weight=8
     //% block="i2c %pADDR || invert %pInvert flip %pFlip i2c-Check %ck EEPROM: Zeichensatz %pEEPROM_Startadresse i2c %pEEPROM_i2cADDR"
     //% pADDR.shadow="oled_eADDR_OLED"
     //% pInvert.shadow="toggleOnOff"
@@ -51,6 +51,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         private readonly qEEPROM_Startadresse_8x8: number
         private readonly qEEPROM_Startadresse_5x5: number
         private qZeichenDrehen: eZeichenDrehen = eZeichenDrehen.nicht
+        private qoledarrays: oledarrays
 
         private i2cError_OLED: number = 0 // Fehlercode vom letzten WriteBuffer (0 ist kein Fehler)
         private i2cError_EEPROM: number = 0
@@ -74,7 +75,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         // ========== group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
 
         //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
-        //% block="init %OLED16x8 || invert %pInvert drehen %pFlip" weight=8
+        //% block="init %OLED16x8 || invert %pInvert drehen %pFlip" weight=6
         //% pInvert.shadow="toggleOnOff" pInvert.defl=false
         //% pFlip.shadow="toggleOnOff" pFlip.defl=false
         init(pInvert?: boolean, pFlip?: boolean): void {
@@ -168,6 +169,13 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
             this.i2cWriteBuffer_OLED(bu)
 
             control.waitMicros(100000) // 100ms Delay Recommended
+        }
+
+        //% group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"
+        //% block="Zeichensatz %OLED16x8 %poledarrays" weight=4
+        //% poledarrays.shadow="oled_new_oledarrays"
+        set_oledarrays(poledarrays: oledarrays) {
+            this.qoledarrays = poledarrays
         }
 
         // ========== group="OLED Display 0.96 + SparkFun Qwiic EEPROM Breakout - 512Kbit"

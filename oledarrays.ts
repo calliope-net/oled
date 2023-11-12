@@ -10,23 +10,29 @@ namespace oled {
     }  */
 
 
+    /* 
+        export function getPixel8ByteArray(pCharCode: number) {
+            let charCodeArray: string[]
+            switch (pCharCode & 0xF0) {
+                //case 0x00: { charCodeArray = extendedCharacters; break; }
+                case 0x20: { charCodeArray = x20; break; } // 16 string-Elemente je 8 Byte = 128
+                case 0x30: { charCodeArray = x30; break; }
+                case 0x40: { charCodeArray = x40; break; }
+                case 0x50: { charCodeArray = x50; break; }
+                case 0x60: { charCodeArray = x60; break; }
+                case 0x70: { charCodeArray = x70; break; }
+                //default: { charCodeArray.length = 0 }
+            }
+            if (charCodeArray != undefined && charCodeArray.length == 16)
+                return Buffer.fromUTF8(charCodeArray.get(pCharCode & 0x0F))
+            else
+            return Buffer.fromUTF8("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF")
+        } */
 
-    export function getPixel8ByteArray(pCharCode: number) {
-        /* let charCodeArray: string[]
-        switch (pCharCode & 0xF0) {
-            //case 0x00: { charCodeArray = extendedCharacters; break; }
-            case 0x20: { charCodeArray = x20; break; } // 16 string-Elemente je 8 Byte = 128
-            case 0x30: { charCodeArray = x30; break; }
-            case 0x40: { charCodeArray = x40; break; }
-            case 0x50: { charCodeArray = x50; break; }
-            case 0x60: { charCodeArray = x60; break; }
-            case 0x70: { charCodeArray = x70; break; }
-            //default: { charCodeArray.length = 0 }
-        }
-        if (charCodeArray != undefined && charCodeArray.length == 16)
-            return Buffer.fromUTF8(charCodeArray.get(pCharCode & 0x0F))
-        else */
-        return Buffer.fromUTF8("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF")
+
+    //% blockId=oled_new_oledarrays block="aus Arrays" blockHidden=true
+    export function new_oledarrays(): oledarrays {
+        return new oledarrays()
     }
 
     export class oledarrays {
