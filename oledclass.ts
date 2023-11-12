@@ -48,12 +48,14 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         private readonly i2cCheck: boolean // i2c-Check
         private i2cError_OLED: number = 0 // Fehlercode vom letzten WriteBuffer (0 ist kein Fehler)
         // EEPROM
-        private i2cADDR_EEPROM = eADDR_EEPROM.EEPROM_x50
-        private i2cError_EEPROM: number = 0
-        private qEEPROM_Startadresse_8x8 = eEEPROM_Startadresse.F800
-        private qEEPROM_Startadresse_5x5 = eEEPROM_Startadresse.EC00
+        //private i2cADDR_EEPROM = eADDR_EEPROM.EEPROM_x50
+        //private i2cError_EEPROM: number = 0
+        //private qEEPROM_Startadresse_8x8 = eEEPROM_Startadresse.F800
+        //private qEEPROM_Startadresse_5x5 = eEEPROM_Startadresse.EC00
 
         private qZeichenDrehen: eZeichenDrehen = eZeichenDrehen.nicht
+        // class
+        private qOLEDeeprom: oledeeprom
         private qOLEDArrays_8x8: oledarrays_8x8
         private qOLEDArrays_5x5: oledarrays_5x5
 
@@ -180,7 +182,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% p_8x8.shadow="oled_new_oledarrays_8x8"
         set_oledarrays_8x8(p_8x8: oledarrays_8x8) {
             this.qOLEDArrays_8x8 = p_8x8
-            this.qEEPROM_Startadresse_8x8 = eEEPROM_Startadresse.kein_EEPROM
+            //this.qEEPROM_Startadresse_8x8 = eEEPROM_Startadresse.kein_EEPROM
         }
 
         //% group="Zeichensatz einstellen (ohne EEPROM)" subcategory="beim Start"
@@ -188,7 +190,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% p_5x5.shadow="oled_new_oledarrays_5x5"
         set_oledarrays_5x5(p_5x5: oledarrays_5x5) {
             this.qOLEDArrays_5x5 = p_5x5
-            this.qEEPROM_Startadresse_5x5 = eEEPROM_Startadresse.kein_EEPROM
+            //this.qEEPROM_Startadresse_5x5 = eEEPROM_Startadresse.kein_EEPROM
         }
 
 
@@ -200,8 +202,10 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% pEEPROM_Startadresse_8x8.defl=oled.eEEPROM_Startadresse.F800
         //% pEEPROM_i2cADDR.shadow=oled_eADDR_EEPROM
         set_eeprom_8x8(pEEPROM_Startadresse_8x8: number, pEEPROM_i2cADDR?: number) { // pEEPROM_i2cADDR.defl funktioniert nicht
-            this.qEEPROM_Startadresse_8x8 = pEEPROM_Startadresse_8x8
-            if (pEEPROM_i2cADDR != undefined) this.i2cADDR_EEPROM = pEEPROM_i2cADDR
+            if (this.qOLEDeeprom == null)
+                this.qOLEDeeprom = new oledeeprom(pEEPROM_i2cADDR, this.i2cCheck)
+            this.qOLEDeeprom.qEEPROM_Startadresse_8x8 = pEEPROM_Startadresse_8x8
+            //if (pEEPROM_i2cADDR != undefined) this.i2cADDR_EEPROM = pEEPROM_i2cADDR
         }
 
         //% group="Zeichensatz einstellen (mit EEPROM)" subcategory="beim Start"
@@ -210,8 +214,10 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% pEEPROM_Startadresse_5x5.defl=oled.eEEPROM_Startadresse.EC00
         //% pEEPROM_i2cADDR.shadow=oled_eADDR_EEPROM
         set_eeprom_5x5(pEEPROM_Startadresse_5x5: number, pEEPROM_i2cADDR?: number) { // pEEPROM_i2cADDR.defl funktioniert nicht
-            this.qEEPROM_Startadresse_5x5 = pEEPROM_Startadresse_5x5
-            if (pEEPROM_i2cADDR != undefined) this.i2cADDR_EEPROM = pEEPROM_i2cADDR
+            if (this.qOLEDeeprom == null)
+                this.qOLEDeeprom = new oledeeprom(pEEPROM_i2cADDR, this.i2cCheck)
+            this.qOLEDeeprom.qEEPROM_Startadresse_5x5 = pEEPROM_Startadresse_5x5
+            //if (pEEPROM_i2cADDR != undefined) this.i2cADDR_EEPROM = pEEPROM_i2cADDR
         }
 
 
@@ -320,7 +326,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
                 for (let j = 0; j < text.length; j++) {
                     bu.setUint8(1, 0xB0 | (7 - (col + j)) & 0x07)      // page number 7-0 B7-B0
-                    bu.write(8, this.getPixel8Byte(text.charCodeAt(j)))
+                    bu.write(8, this.getPixel_8x8(text.charCodeAt(j)))
 
                     this.i2cWriteBuffer_OLED(bu)
                 }
@@ -342,6 +348,9 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% inlineInputMode=inline
         fillScreen(pEEPROM_Startadresse: number, vonZeile?: number, bisZeile?: number) {
             if (between(vonZeile, 0, 7) && between(bisZeile, 0, 7)) {
+
+                if (this.qOLEDeeprom == null) { this.qOLEDeeprom = new oledeeprom() }
+
                 let buEEPROM = Buffer.create(2)
 
                 let buDisplay = Buffer.create(135)
@@ -355,9 +364,9 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
                     buDisplay.setUint8(1, 0xB0 | page) // an offset=1 steht die page number (Zeile 0-7)
                     //offsetDisplay = 7 // offset 7-135 sind 128 Byte für die Pixel in einer Zeile
 
-                    this.i2cWriteBuffer_EEPROM(buEEPROM)
+                    this.qOLEDeeprom.i2cWriteBuffer(buEEPROM)
 
-                    buDisplay.write(7, this.i2cReadBuffer_EEPROM(128))
+                    buDisplay.write(7, this.qOLEDeeprom.i2cReadBuffer(128))
 
                     this.i2cWriteBuffer_OLED(buDisplay)
                 }
@@ -396,7 +405,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
         //% group="i2c Fehlercode" advanced=true
         //% block="%OLEDtext i2c Fehlercode EEPROM" weight=2
-        geti2cError_EEPROM() { return this.i2cError_EEPROM }
+        geti2cError_EEPROM() { return this.qOLEDeeprom.i2cError_EEPROM }
 
 
 
@@ -423,26 +432,34 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
             let font: string
             bu.setUint8(offset++, eCONTROL.x40_Data) // CONTROL Byte 0x40: Display Data
             for (let j = 0; j < pText.length; j++) {
-                bu.write(offset, this.getPixel8Byte(pText.charCodeAt(j)))
+                bu.write(offset, this.getPixel_8x8(pText.charCodeAt(j)))
                 offset += 8
             }
             this.i2cWriteBuffer_OLED(bu)
             control.waitMicros(50)
         }
 
-        private getPixel8Byte(pCharCode: number): Buffer {//, pDrehen: eZeichenDrehen
-            if (this.i2cError_EEPROM == 0 && this.qEEPROM_Startadresse_8x8 != eEEPROM_Startadresse.kein_EEPROM) {
+        private getPixel_8x8(pCharCode: number): Buffer {//, pDrehen: eZeichenDrehen
+            if (this.qOLEDArrays_8x8 != null)
+                return drehen(this.qOLEDArrays_8x8.getPixel_8x8(pCharCode), this.qZeichenDrehen)
+
+            /* else if (this.i2cError_EEPROM == 0 && this.qEEPROM_Startadresse_8x8 != eEEPROM_Startadresse.kein_EEPROM) {
                 let bu = Buffer.create(2)
                 bu.setNumber(NumberFormat.UInt16BE, 0, this.qEEPROM_Startadresse_8x8 + pCharCode * 8)
                 this.i2cWriteBuffer_EEPROM(bu, true)
 
                 return drehen(this.i2cReadBuffer_EEPROM(8), this.qZeichenDrehen)
-            }
-            else if (this.qOLEDArrays_8x8 != null) {
-                return drehen(this.qOLEDArrays_8x8.getPixel8ByteArray(pCharCode), this.qZeichenDrehen)
-            } else {
+            } */
+            //else if (this.qOLEDArrays_8x8 != null) {
+            //    return drehen(this.qOLEDArrays_8x8.getPixel8ByteArray(pCharCode), this.qZeichenDrehen)
+            else {
+
+                if (this.qOLEDeeprom == null) { this.qOLEDeeprom = new oledeeprom() }
+
+                return drehen(this.qOLEDeeprom.getPixel_8x8(pCharCode), this.qZeichenDrehen)
+
                 // wenn kein EEPROM angeschlossen, Zeichencode aus Array laden
-                return Buffer.fromUTF8("\xFF\xFF\xFF\xFF\x00\xFF\xFF\xFF")
+                //return Buffer.fromUTF8("\xFF\xFF\xFF\xFF\x00\xFF\xFF\xFF")
 
 
                 //return drehen(getPixel8ByteArray(pCharCode), this.qZeichenDrehen)
@@ -452,24 +469,24 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
 
         // ========== private i2cWriteBuffer i2cReadBuffer
-
-        private i2cWriteBuffer_EEPROM(buf: Buffer, repeat: boolean = false) {
-            //if (this.i2cADDR_EEPROM != undefined && this.i2cADDR_EEPROM != eEEPROM_Startadresse.kein_EEPROM)
-            if (this.i2cError_EEPROM == 0) { // vorher kein Fehler
-                this.i2cError_EEPROM = pins.i2cWriteBuffer(this.i2cADDR_EEPROM, buf, repeat)
-                if (this.i2cCheck && this.i2cError_EEPROM != 0)  // vorher kein Fehler, wenn (n_i2cCheck=true): beim 1. Fehler anzeigen
-                    basic.showString(Buffer.fromArray([this.i2cADDR_EEPROM]).toHex()) // zeige fehlerhafte i2c-Adresse als HEX
-            } else if (!this.i2cCheck)  // vorher Fehler, aber ignorieren (n_i2cCheck=false): i2c weiter versuchen
-                this.i2cError_EEPROM = pins.i2cWriteBuffer(this.i2cADDR_EEPROM, buf, repeat)
-        }
-
-        private i2cReadBuffer_EEPROM(size: number, repeat: boolean = false): Buffer {
-            if (!this.i2cCheck || this.i2cError_EEPROM == 0)
-                return pins.i2cReadBuffer(this.i2cADDR_EEPROM, size, repeat)
-            else
-                return Buffer.create(size)
-        }
-
+        /* 
+                private i2cWriteBuffer_EEPROM(buf: Buffer, repeat: boolean = false) {
+                    //if (this.i2cADDR_EEPROM != undefined && this.i2cADDR_EEPROM != eEEPROM_Startadresse.kein_EEPROM)
+                    if (this.i2cError_EEPROM == 0) { // vorher kein Fehler
+                        this.i2cError_EEPROM = pins.i2cWriteBuffer(this.i2cADDR_EEPROM, buf, repeat)
+                        if (this.i2cCheck && this.i2cError_EEPROM != 0)  // vorher kein Fehler, wenn (n_i2cCheck=true): beim 1. Fehler anzeigen
+                            basic.showString(Buffer.fromArray([this.i2cADDR_EEPROM]).toHex()) // zeige fehlerhafte i2c-Adresse als HEX
+                    } else if (!this.i2cCheck)  // vorher Fehler, aber ignorieren (n_i2cCheck=false): i2c weiter versuchen
+                        this.i2cError_EEPROM = pins.i2cWriteBuffer(this.i2cADDR_EEPROM, buf, repeat)
+                }
+        
+                private i2cReadBuffer_EEPROM(size: number, repeat: boolean = false): Buffer {
+                    if (!this.i2cCheck || this.i2cError_EEPROM == 0)
+                        return pins.i2cReadBuffer(this.i2cADDR_EEPROM, size, repeat)
+                    else
+                        return Buffer.create(size)
+                }
+         */
 
         protected i2cWriteBuffer_OLED(buf: Buffer, repeat: boolean = false) {
             if (this.i2cError_OLED == 0) { // vorher kein Fehler

@@ -4,18 +4,42 @@ namespace oled
 neu programmiert von Lutz Elßner im November 2023
 */ {
 
+    export enum eADDR_EEPROM { EEPROM_x50 = 0x50 }
+    //% blockId=oled_eADDR_EEPROM block="%pADDR" blockHidden=true
+    export function oled_eADDR_EEPROM(pADDR: eADDR_EEPROM): number { return pADDR }
+
+    export enum eEEPROM_Startadresse {
+        //% block="F800 Standard Zeichensatz"
+        F800 = 0xF800,
+        //% block="F000 zweiter Zeichensatz"
+        F000 = 0xF000,
+        //% block="F400 Grafikzeichen"
+        F400 = 0xF400,
+        //% block="FC00 Sonderzeichen"
+        FC00 = 0xFC00,
+        //% block="EC00 5x5 Zeichensatz"
+        EC00 = 0xEC00
+    }
+    //% blockId=oled_eEEPROM_Startadresse block="%p" blockHidden=true
+    export function oled_eEEPROM_Startadresse(p: eEEPROM_Startadresse): number { return p }
+
+
+    // ========== class oledeeprom
+
     export class oledeeprom {
         private readonly i2cADDR_EEPROM: number
         private readonly i2cCheck: boolean // i2c-Check
-        private i2cError_EEPROM: number = 0
+        public i2cError_EEPROM: number = 0
 
         public qEEPROM_Startadresse_8x8 = eEEPROM_Startadresse.F800
         public qEEPROM_Startadresse_5x5 = eEEPROM_Startadresse.EC00
 
 
+
         constructor(pADDR = eADDR_EEPROM.EEPROM_x50, ck: boolean = true) {
-            this.i2cADDR_EEPROM = pADDR
+            this.i2cADDR_EEPROM = (pADDR != undefined ? pADDR : eADDR_EEPROM.EEPROM_x50)
             this.i2cError_EEPROM = 0 // Reset Fehlercode
+            basic.showString("EE")
         }
 
         getPixel_8x8(pCharCode: number): Buffer {

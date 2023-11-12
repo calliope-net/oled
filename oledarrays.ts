@@ -27,7 +27,7 @@ namespace oled {
         private readonly x80: string[]
 
 
-        getPixel8ByteArray(pCharCode: number): Buffer {
+        getPixel_8x8(pCharCode: number): Buffer {
             let s8: string
             if (between(pCharCode, 0x20, 0x7F))
                 switch (pCharCode & 0xF0) { // 16 string-Elemente je 8 Byte = 128

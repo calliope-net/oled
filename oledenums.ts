@@ -7,26 +7,6 @@ namespace oled {
     //% blockId=oled_eADDR_OLED block="%pADDR" blockHidden=true
     export function oled_eADDR_OLED(pADDR: eADDR_OLED): number { return pADDR }
 
-    export enum eADDR_EEPROM { EEPROM_x50 = 0x50 }
-    //% blockId=oled_eADDR_EEPROM block="%pADDR" blockHidden=true
-    export function oled_eADDR_EEPROM(pADDR: eADDR_EEPROM): number { return pADDR }
-
-    export enum eEEPROM_Startadresse {
-        //%block="kein EEPROM"
-        kein_EEPROM = 0xFFFF,
-        //% block="F800 Standard Zeichensatz"
-        F800 = 0xF800,
-        //% block="F000 zweiter Zeichensatz"
-        F000 = 0xF000,
-        //% block="F400 Grafikzeichen"
-        F400 = 0xF400,
-        //% block="FC00 Sonderzeichen"
-        FC00 = 0xFC00,
-        //% block="EC00 5x5 Zeichensatz"
-        EC00 = 0xEC00
-    }
-    //% blockId=oled_eEEPROM_Startadresse block="%p" blockHidden=true
-    export function oled_eEEPROM_Startadresse(p: eEEPROM_Startadresse): number { return p }
 
     //% blockId=oled_text block="%s" blockHidden=true
     export function oled_text(s: string): string { return s }
