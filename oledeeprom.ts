@@ -35,7 +35,6 @@ neu programmiert von Lutz Elßner im November 2023
         public qEEPROM_Startadresse_5x5 = eEEPROM_Startadresse.EC00
 
 
-
         constructor(pADDR = eADDR_EEPROM.EEPROM_x50, ck: boolean = true) {
             this.i2cADDR_EEPROM = (pADDR != undefined ? pADDR : eADDR_EEPROM.EEPROM_x50)
             this.i2cError_EEPROM = 0 // Reset Fehlercode

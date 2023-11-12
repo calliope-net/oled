@@ -24,12 +24,6 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
     //% pInvert.shadow="toggleOnOff"
     //% pFlip.shadow="toggleOnOff"
     //% ck.shadow="toggleOnOff" ck.defl=1
-
-    //% pEEPROM_Startadresse_8x8.shadow="oled_eEEPROM_Startadresse"
-    //% pEEPROM_Startadresse_5x5.shadow="oled_eEEPROM_Startadresse"
-    //% pEEPROM_Startadresse_5x5.defl=oled.eEEPROM_Startadresse.EC00
-    //% pEEPROM_i2cADDR.shadow="oled_eADDR_EEPROM"
-
     //% inlineInputMode=inline
     //% blockSetVariable=OLEDtext
     export function new_oledclass(pADDR: number, pInvert?: boolean, pFlip?: boolean, ck?: boolean): oledclass {
@@ -44,7 +38,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
     // ========== class oledclass
 
     export class oledclass {
-        private readonly i2cADDR_OLED: eADDR_OLED
+        private readonly i2cADDR: eADDR_OLED
         private readonly i2cCheck: boolean // i2c-Check
         private i2cError_OLED: number = 0 // Fehlercode vom letzten WriteBuffer (0 ist kein Fehler)
         // EEPROM
@@ -61,17 +55,10 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
 
         constructor(pADDR: number, pInvert: boolean, pFlip: boolean, ck: boolean) {
-
-            this.i2cADDR_OLED = pADDR
+            this.i2cADDR = pADDR
             this.i2cCheck = ck
-            //this.qEEPROM_Startadresse_8x8 = pEEPROM_Startadresse_8x8
-            //this.qEEPROM_Startadresse_5x5 = pEEPROM_Startadresse_5x5
-            //this.i2cADDR_EEPROM = pEEPROM_i2cADDR
             this.i2cError_OLED = 0 // Reset Fehlercode
-            //this.i2cError_EEPROM = 0 // Reset Fehlercode
-
             this.init(pInvert, pFlip)
-            //this.getPixel8Byte(0x20)  // testet, ob EEPROM angeschlossen ist
         }
 
 
@@ -490,11 +477,11 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
         protected i2cWriteBuffer_OLED(buf: Buffer, repeat: boolean = false) {
             if (this.i2cError_OLED == 0) { // vorher kein Fehler
-                this.i2cError_OLED = pins.i2cWriteBuffer(this.i2cADDR_OLED, buf, repeat)
+                this.i2cError_OLED = pins.i2cWriteBuffer(this.i2cADDR, buf, repeat)
                 if (this.i2cCheck && this.i2cError_OLED != 0)  // vorher kein Fehler, wenn (n_i2cCheck=true): beim 1. Fehler anzeigen
-                    basic.showString(Buffer.fromArray([this.i2cADDR_OLED]).toHex()) // zeige fehlerhafte i2c-Adresse als HEX
+                    basic.showString(Buffer.fromArray([this.i2cADDR]).toHex()) // zeige fehlerhafte i2c-Adresse als HEX
             } else if (!this.i2cCheck)  // vorher Fehler, aber ignorieren (n_i2cCheck=false): i2c weiter versuchen
-                this.i2cError_OLED = pins.i2cWriteBuffer(this.i2cADDR_OLED, buf, repeat)
+                this.i2cError_OLED = pins.i2cWriteBuffer(this.i2cADDR, buf, repeat)
             //else { } // n_i2cCheck=true und n_i2cError != 0: weitere i2c Aufrufe blockieren
         }
 
