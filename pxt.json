@@ -13,7 +13,6 @@
         "oledpaint.ts",
         "oledarrays.ts",
         "oledimage.ts",
-        "oledenums.ts",
         "oledeeprom.ts",
         "oledfunctions.ts"
     ],
