@@ -49,8 +49,8 @@ neu programmiert von Lutz Elßner im November 2023
             return this.read(this.qEEPROM_Startadresse_8x8 + pCharCode * 8, 8)
         }
 
-        getPixel_5x5(pCharCode: number): Buffer {
-            return this.read(this.qEEPROM_Startadresse_5x5 + pCharCode * 4, 4)
+        getPixel32Bit_5x5(pCharCode: number): number {
+            return this.read(this.qEEPROM_Startadresse_5x5 + pCharCode * 4, 4).getNumber(NumberFormat.UInt32BE, 0)
         }
 
         read(pStartadresse: number, size: number): Buffer {

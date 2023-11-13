@@ -34,47 +34,34 @@ namespace oled {
         private readonly x20: number[] // 32 number-Elemente je 32 Bit
         private readonly x40: number[]
         private readonly x60: number[]
-
-        getPixel(inputString: string, screenBuf: Buffer, off: number) {
-            let y = 0 // Zeile (page) auf Display 0-7
-            let x = 0 // ist hier immer 0
-            let col = 0
-            let number32bit = 0
-            let ind = 0
-            for (let charindexOfString = 0; charindexOfString < inputString.length; charindexOfString++) {
-                //charDisplayBytes = font[inputString.charCodeAt(charOfString)]
-                basic.showString(charindexOfString.toString())
-                number32bit = this.getFont(inputString.charCodeAt(charindexOfString))
-                for (let i = 0; i < 5; i++) {  //for loop will take byte font array and load it into the correct register, the shift to the next byte to load into the next location
-                    col = 0
-                    for (let j = 0; j < 5; j++) {
-                        if (number32bit & (1 << (5 * i + j)))
-                            col |= (1 << (j + 1))
+        /* 
+                getPixel_5x5(inputString: string, screenBuf: Buffer, off: number) {
+                    let number32bit: number, displayByte: number
+                    for (let charIndex = 0; charIndex < inputString.length; charIndex++) {
+                        number32bit = this.getPixel32Bit_5x5(inputString.charCodeAt(charIndex))
+                        for (let i = 0; i < 5; i++) {  //for loop will take byte font array and load it into the correct register, the shift to the next byte to load into the next location
+                            displayByte = 0
+                            for (let j = 0; j < 5; j++)
+                                if (number32bit & (1 << (5 * i + j)))
+                                    displayByte |= (1 << (j + 1))
+                            screenBuf.setUint8(off + charIndex * 5 + i, displayByte)
+                        }
                     }
-                    ind = charindexOfString * 5 + i  // 34
-
-                    //ind = (x + charindexOfString) * 5 + y * 128 + i + 1
-                    screenBuf[off + ind] = col
                 }
-            }
-        }
-
-        getFont(pCharCode: number) {
+         */
+        getPixel32Bit_5x5(pCharCode: number): number {
             let number32bit: number = this.x00
             if (between(pCharCode, 0x20, 0x7F))
                 switch (pCharCode & 0b11100000) { // 32 number-Elemente = 5 Bit
                     case 0x20: number32bit = this.x20.get(pCharCode & 0b00011111); break
                     case 0x40: number32bit = this.x40.get(pCharCode & 0b00011111); break
                     case 0x60: number32bit = this.x60.get(pCharCode & 0b00011111); break
-                    //default: number32bit = this.x00; break
                 }
-            //else
-            //    number32bit = this.x00
             return number32bit
         }
 
         constructor() {
-            this.x00 = 0x0022d422 // 00-31 0x00-0x1F
+            this.x00 = 0x0022d422 // 00-31 0x00-0x1F // 63 0x3F Fragezeichen
             this.x20 = [ // 32-63 x20-x3F
                 0x00000000, 0x000002e0, 0x00018060, 0x00afabea, 0x00aed6ea, 0x01991133, 0x010556aa, 0x00000060,
                 0x000045c0, 0x00003a20, 0x00051140, 0x00023880, 0x00002200, 0x00021080, 0x00000100, 0x00111110,
@@ -91,7 +78,7 @@ namespace oled {
                 0x00000820, 0x010f4a4c, 0x0004529f, 0x00094a4c, 0x000fd288, 0x000956ae, 0x000097c4, 0x0007d6a2,
                 0x000c109f, 0x000003a0, 0x0006c200, 0x0008289f, 0x000841e0, 0x01e1105e, 0x000e085e, 0x00064a4c,
                 0x0002295e, 0x000f2944, 0x0001085c, 0x00012a90, 0x010a51e0, 0x010f420e, 0x00644106, 0x01e8221e,
-                0x00093192, 0x00222292, 0x00095b52, 0x0008fc80, 0x000003e0, 0x000013f1, 0x00841080, 0x0022d422
+                0x00093192, 0x00222292, 0x00095b52, 0x0008fc80, 0x000003e0, 0x000013f1, 0x00841080, 0x01FFFFFF
             ]
         } // constructor
     } // class oledarrays_5x5

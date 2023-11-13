@@ -167,37 +167,31 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% inlineInputMode=inline
         writeText25x8(row: number, col: number, end: number, pText: any, pAlign?: eAlign) {
             let text: string = convertToText(pText)
-            //let len: number = end - col + 1
+            let len: number = end - col + 1
 
-            let bu = Buffer.create(this.qOffset + text.length * 5)
-            let offset = this.setCursorBuffer6(bu, 0, row, col) // setCursor
-            bu.setUint8(offset++, eCONTROL.x40_Data) // CONTROL Byte 0x40: Display Data
 
-            //basic.showString("1")
+            if (between(row, 0, 7) && between(col, 0, 24) && between(len, 0, 25)) {
 
-            this.qOLEDArrays_5x5.getPixel(text, bu, offset)
-            basic.showString("9")
+                if (text.length > len)
+                    text = text.substr(0, len)
+                else if (text.length < len && pAlign == eAlign.rechts)
+                    text = "                         ".substr(0, len - text.length) + text
+                else if (text.length < len)
+                    text = text + "                         ".substr(0, len - text.length)
+                // else { } // Original Text text.length == len
 
-            this.i2cWriteBuffer(bu)
-            control.waitMicros(50)
-            /* 
-                       
-                        if (between(row, 0, 7) && between(col, 0, 15) && between(len, 0, 16)) {
-            
-                            if (text.length > len)
-                                text = text.substr(0, len)
-                            else if (text.length < len && pAlign == eAlign.rechts)
-                                text = "                ".substr(0, len - text.length) + text
-                            else if (text.length < len)
-                                text = text + "                ".substr(0, len - text.length)
-                            // else { } // Original Text text.length == len
-            
-                            let bu = Buffer.create(7 + text.length * 8)
-                            let offset = this.setCursorBuffer6(bu, 0, row, col) // setCursor
-            
-                            this.writeTextBuffer(bu, offset, text)
-                        }
-             */
+
+
+
+                let bu = Buffer.create(this.qOffset + text.length * 5)
+                let offset = this.setCursorBuffer6(bu, 0, row, col) // setCursor
+                bu.setUint8(offset++, eCONTROL.x40_Data) // CONTROL Byte 0x40: Display Data
+
+                this.getPixel_5x5(text, bu, offset)
+
+                this.i2cWriteBuffer(bu)
+                control.waitMicros(50)
+            }
         }
 
 
@@ -501,6 +495,30 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
 
                 //return drehen(getPixel8ByteArray(pCharCode), this.qZeichenDrehen)
+            }
+        }
+
+        private getPixel_5x5(pString: string, pBuffer: Buffer, pOffset: number) {
+
+            if (this.qOLEDArrays_5x5 == null && this.qOLEDeeprom == null)
+                this.qOLEDeeprom = new oledeeprom()
+
+            let number32bit: number, displayByte: number
+            for (let charIndex = 0; charIndex < pString.length; charIndex++) {
+                //number32bit = this.getPixel32Bit_5x5(inputString.charCodeAt(charIndex))
+
+                if (this.qOLEDArrays_5x5 != null)
+                    number32bit = this.qOLEDArrays_5x5.getPixel32Bit_5x5(pString.charCodeAt(charIndex))
+                else
+                    number32bit = this.qOLEDeeprom.getPixel32Bit_5x5(pString.charCodeAt(charIndex))
+
+                for (let i = 0; i < 5; i++) {  //for loop will take byte font array and load it into the correct register, the shift to the next byte to load into the next location
+                    displayByte = 0
+                    for (let j = 0; j < 5; j++)
+                        if (number32bit & (1 << (5 * i + j)))
+                            displayByte |= (1 << (j + 1))
+                    pBuffer.setUint8(pOffset + charIndex * 5 + i, displayByte)
+                }
             }
         }
 
