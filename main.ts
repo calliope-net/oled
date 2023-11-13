@@ -26,3 +26,6 @@ OLEDpaint = oled.new_oledpaint(oled.oled_eADDR_OLED(oled.eADDR_OLED.OLED_16x8_x3
 OLEDtext = OLEDpaint.return_oledclass()
 OLEDtext.set_oledarrays_8x8(oled.new_oledarrays_8x8())
 basic.showIcon(IconNames.House)
+let OLEDpaint2 = oled.new_oledpaint(oled.oled_eADDR_OLED(oled.eADDR_OLED.OLED_16x8_x3D))
+let OLEDtext2 = OLEDpaint2.return_oledclass()
+OLEDtext2.set_oledarrays_8x8(oled.new_oledarrays_8x8())

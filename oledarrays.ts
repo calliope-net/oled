@@ -1,14 +1,26 @@
 
 namespace oled {
+    let nOLEDArrays_8x8: oledarrays_8x8 = null // nur eine Instanz für mehrere Displays
+    let nOLEDArrays_5x5: oledarrays_5x5 = null
 
-    //% blockId=oled_new_oledarrays_5x5 block="aus Arrays" blockHidden=true
+    //% blockId=oled_new_oledarrays_5x5 block="aus Arrays 5x5" blockHidden=true
     export function new_oledarrays_5x5(): oledarrays_5x5 {
-        return new oledarrays_5x5()
+        if (nOLEDArrays_5x5 == null)
+            nOLEDArrays_5x5 = new oledarrays_5x5()
+        return nOLEDArrays_5x5
     }
 
-    //% blockId=oled_new_oledarrays_8x8 block="aus Arrays" blockHidden=true
+    //% blockId=oled_new_oledarrays_8x8 block="aus Arrays 8x8" blockHidden=true
     export function new_oledarrays_8x8(): oledarrays_8x8 {
-        return new oledarrays_8x8()
+        if (nOLEDArrays_8x8 == null) {
+            basic.showString("n")
+            nOLEDArrays_8x8 = new oledarrays_8x8()
+        }
+        if (nOLEDArrays_8x8 == undefined) {
+            basic.showString("u")
+            //nOLEDArrays_8x8 = new oledarrays_8x8()
+        }
+        return nOLEDArrays_8x8
     }
 
 
