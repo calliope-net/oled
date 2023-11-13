@@ -42,10 +42,6 @@ neu programmiert von Lutz Elßner im November 2023
 
 
         getPixel_8x8(pCharCode: number): Buffer {
-            //let bu = Buffer.create(2)
-            //bu.setNumber(NumberFormat.UInt16BE, 0, this.qEEPROM_Startadresse_8x8 + pCharCode * 8)
-            //this.i2cWriteBuffer(bu, true)
-            //return this.i2cReadBuffer(8)
             return this.read(this.qEEPROM_Startadresse_8x8 + pCharCode * 8, 8)
         }
 

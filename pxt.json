@@ -31,7 +31,7 @@
         "config": {
             "microbit-dal": {
                 "bluetooth": {
-                    "enabled": 1,
+                    "enabled": 0,
                     "pairing_mode": 0,
                     "partial_flashing": 0,
                     "dfu_service": 0,

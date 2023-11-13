@@ -199,7 +199,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
 
         //% group="Display"
-        //% block="Zeichen %OLEDtext %pZeichenDrehen" weight=4
+        //% block="Zeichen 8x8 %OLEDtext %pZeichenDrehen" weight=4
         zeichenDrehen(pZeichenDrehen: eZeichenDrehen) { this.qZeichenDrehen = pZeichenDrehen }
 
         //% group="Display"
@@ -244,9 +244,9 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         set_oledarrays_5x5(p_5x5: oledarrays_5x5) { this.qOLEDArrays_5x5 = p_5x5 }
 
 
-        // ========== group="Zeichensatz einstellen (mit EEPROM)" subcategory="beim Start"
+        // ========== group="Blöcke nur verwenden, um EEPROM Adressen zu ändern" subcategory="beim Start"
 
-        //% group="Blöcke nur verwenden, um Standardwerte zu ändern" subcategory="beim Start"
+        //% group="Blöcke nur verwenden, um EEPROM Adressen zu ändern" subcategory="beim Start"
         //% block="Zeichen 8x8 %OLEDtext %pEEPROM_Startadresse_8x8 || i2c %pEEPROM_i2cADDR" weight=4
         //% pEEPROM_Startadresse_8x8.shadow=oled_eEEPROM_Startadresse
         //% pEEPROM_Startadresse_8x8.defl=oled.eEEPROM_Startadresse.F800
@@ -258,7 +258,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
             //if (pEEPROM_i2cADDR != undefined) this.i2cADDR_EEPROM = pEEPROM_i2cADDR
         }
 
-        //% group="Blöcke nur verwenden, um Standardwerte zu ändern" subcategory="beim Start"
+        //% group="Blöcke nur verwenden, um EEPROM Adressen zu ändern" subcategory="beim Start"
         //% block="Zeichen 5x5 %OLEDtext %pEEPROM_Startadresse_5x5 || i2c %pEEPROM_i2cADDR" weight=2
         //% pEEPROM_Startadresse_5x5.shadow=oled_eEEPROM_Startadresse
         //% pEEPROM_Startadresse_5x5.defl=oled.eEEPROM_Startadresse.EC00
