@@ -30,8 +30,8 @@ namespace oled {
     // ========== class oledarrays_5x5 ==========
 
     export class oledarrays_5x5 {
-        private readonly x00: number
-        private readonly x20: number[]
+        private readonly x00: number // gleiche number für alle Steuerzeichen 00-31 0x00-0x1F
+        private readonly x20: number[] // 32 number-Elemente je 32 Bit
         private readonly x40: number[]
         private readonly x60: number[]
 
@@ -58,14 +58,16 @@ namespace oled {
         }
 
         getFont(pCharCode: number) {
-            let number32bit: number
+            let number32bit: number = this.x00
             if (between(pCharCode, 0x20, 0x7F))
-                switch (pCharCode & 0b11100000) { // 32 number-Elemente
+                switch (pCharCode & 0b11100000) { // 32 number-Elemente = 5 Bit
                     case 0x20: number32bit = this.x20.get(pCharCode & 0b00011111); break
                     case 0x40: number32bit = this.x40.get(pCharCode & 0b00011111); break
                     case 0x60: number32bit = this.x60.get(pCharCode & 0b00011111); break
-                    default: number32bit = this.x00; break
+                    //default: number32bit = this.x00; break
                 }
+            //else
+            //    number32bit = this.x00
             return number32bit
         }
 
