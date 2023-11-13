@@ -61,6 +61,8 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         private qOLEDArrays_8x8: oledarrays_8x8
         private qOLEDArrays_5x5: oledarrays_5x5
 
+        protected readonly qOffset = 7 // 6 Bytes zur Cursor Positionierung vor den Daten + 1 Byte 0x40 Display Data
+
         constructor(pADDR: number, pInvert: boolean, pFlip: boolean, ck: boolean) {
             this.i2cADDR = pADDR
             this.i2cCheck = ck
@@ -155,6 +157,48 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
             }
         }
 
+        // ========== group="Text 25x8 anzeigen"
+
+        //% group="Text 25x8 anzeigen"
+        //% block="25x8 %OLEDtext Text Zeile %row von %col bis %end %pText || %pAlign" weight=8
+        //% row.min=0 row.max=7 col.min=0 col.max=24 end.min=0 end.max=24 end.defl=24
+        //% pText.shadow="oled_text"
+        //% pAlign.defl=0
+        //% inlineInputMode=inline
+        writeText25x8(row: number, col: number, end: number, pText: any, pAlign?: eAlign) {
+            let text: string = convertToText(pText)
+            //let len: number = end - col + 1
+
+            let bu = Buffer.create(this.qOffset + text.length * 5)
+            let offset = this.setCursorBuffer6(bu, 0, row, col) // setCursor
+            bu.setUint8(offset++, eCONTROL.x40_Data) // CONTROL Byte 0x40: Display Data
+
+            //basic.showString("1")
+
+            this.qOLEDArrays_5x5.getPixel(text, bu, offset)
+            basic.showString("9")
+
+            this.i2cWriteBuffer(bu)
+            control.waitMicros(50)
+            /* 
+                       
+                        if (between(row, 0, 7) && between(col, 0, 15) && between(len, 0, 16)) {
+            
+                            if (text.length > len)
+                                text = text.substr(0, len)
+                            else if (text.length < len && pAlign == eAlign.rechts)
+                                text = "                ".substr(0, len - text.length) + text
+                            else if (text.length < len)
+                                text = text + "                ".substr(0, len - text.length)
+                            // else { } // Original Text text.length == len
+            
+                            let bu = Buffer.create(7 + text.length * 8)
+                            let offset = this.setCursorBuffer6(bu, 0, row, col) // setCursor
+            
+                            this.writeTextBuffer(bu, offset, text)
+                        }
+             */
+        }
 
 
         // ========== group="Display"

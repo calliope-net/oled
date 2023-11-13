@@ -43,6 +43,7 @@ namespace oled {
             let ind = 0
             for (let charindexOfString = 0; charindexOfString < inputString.length; charindexOfString++) {
                 //charDisplayBytes = font[inputString.charCodeAt(charOfString)]
+                basic.showString(charindexOfString.toString())
                 number32bit = this.getFont(inputString.charCodeAt(charindexOfString))
                 for (let i = 0; i < 5; i++) {  //for loop will take byte font array and load it into the correct register, the shift to the next byte to load into the next location
                     col = 0
@@ -50,8 +51,9 @@ namespace oled {
                         if (number32bit & (1 << (5 * i + j)))
                             col |= (1 << (j + 1))
                     }
+                    ind = charindexOfString * 5 + i  // 34
 
-                    ind = (x + charindexOfString) * 5 + y * 128 + i + 1
+                    //ind = (x + charindexOfString) * 5 + y * 128 + i + 1
                     screenBuf[off + ind] = col
                 }
             }

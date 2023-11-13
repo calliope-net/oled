@@ -11,7 +11,7 @@ neu programmiert von Lutz Elßner im November 2023
     // ========== class oledpaint extends oledclass
 
     export class oledpaint extends oledclass {
-        private readonly qOffset = 7 // 6 Bytes zur Cursor Positionierung vor den Daten + 1 Byte 0x40 Display Data
+        //private readonly qOffset = 7 // 6 Bytes zur Cursor Positionierung vor den Daten + 1 Byte 0x40 Display Data
         private readonly qBuffer: Buffer[] // Array von 8 Buffern je (qOffset + 128) Byte
 
         constructor(pADDR: number, pInvert: boolean, pFlip: boolean, ck: boolean) {
