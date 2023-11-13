@@ -471,30 +471,14 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
             control.waitMicros(50)
         }
 
-        private getPixel_8x8(pCharCode: number): Buffer {//, pDrehen: eZeichenDrehen
+        private getPixel_8x8(pCharCode: number): Buffer {
             if (this.qOLEDArrays_8x8 != null)
                 return drehen(this.qOLEDArrays_8x8.getPixel_8x8(pCharCode), this.qZeichenDrehen)
-
-            /* else if (this.i2cError_EEPROM == 0 && this.qEEPROM_Startadresse_8x8 != eEEPROM_Startadresse.kein_EEPROM) {
-                let bu = Buffer.create(2)
-                bu.setNumber(NumberFormat.UInt16BE, 0, this.qEEPROM_Startadresse_8x8 + pCharCode * 8)
-                this.i2cWriteBuffer_EEPROM(bu, true)
-
-                return drehen(this.i2cReadBuffer_EEPROM(8), this.qZeichenDrehen)
-            } */
-            //else if (this.qOLEDArrays_8x8 != null) {
-            //    return drehen(this.qOLEDArrays_8x8.getPixel8ByteArray(pCharCode), this.qZeichenDrehen)
             else {
-
-                if (this.qOLEDeeprom == null) { this.qOLEDeeprom = new oledeeprom() }
+                if (this.qOLEDeeprom == null)
+                    this.qOLEDeeprom = new oledeeprom()
 
                 return drehen(this.qOLEDeeprom.getPixel_8x8(pCharCode), this.qZeichenDrehen)
-
-                // wenn kein EEPROM angeschlossen, Zeichencode aus Array laden
-                //return Buffer.fromUTF8("\xFF\xFF\xFF\xFF\x00\xFF\xFF\xFF")
-
-
-                //return drehen(getPixel8ByteArray(pCharCode), this.qZeichenDrehen)
             }
         }
 
@@ -505,7 +489,6 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
             let number32bit: number, displayByte: number
             for (let charIndex = 0; charIndex < pString.length; charIndex++) {
-                //number32bit = this.getPixel32Bit_5x5(inputString.charCodeAt(charIndex))
 
                 if (this.qOLEDArrays_5x5 != null)
                     number32bit = this.qOLEDArrays_5x5.getPixel32Bit_5x5(pString.charCodeAt(charIndex))

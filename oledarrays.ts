@@ -96,35 +96,52 @@ namespace oled {
         private readonly x50: string[]
         private readonly x60: string[]
         private readonly x70: string[]
-        private readonly x80: string[]
+        //private readonly x80: string[]
+        //private readonly h80: string[]
+        private readonly b80: Buffer
 
 
         getPixel_8x8(pCharCode: number): Buffer {
-            let s8: string
-            if (between(pCharCode, 0x20, 0x7F))
+            let string8Byte: string
+            if (between(pCharCode, 0x20, 0x7F)) {
+                string8Byte = this.x70.get(15)
                 switch (pCharCode & 0xF0) { // 16 string-Elemente je 8 Byte = 128
-                    case 0x20: s8 = this.x20.get(pCharCode & 0x0F); break
-                    case 0x30: s8 = this.x30.get(pCharCode & 0x0F); break
-                    case 0x40: s8 = this.x40.get(pCharCode & 0x0F); break
-                    case 0x50: s8 = this.x50.get(pCharCode & 0x0F); break
-                    case 0x60: s8 = this.x60.get(pCharCode & 0x0F); break
-                    case 0x70: s8 = this.x70.get(pCharCode & 0x0F); break
-                    default: s8 = this.x70.get(15); break
+                    case 0x20: string8Byte = this.x20.get(pCharCode & 0x0F); break
+                    case 0x30: string8Byte = this.x30.get(pCharCode & 0x0F); break
+                    case 0x40: string8Byte = this.x40.get(pCharCode & 0x0F); break
+                    case 0x50: string8Byte = this.x50.get(pCharCode & 0x0F); break
+                    case 0x60: string8Byte = this.x60.get(pCharCode & 0x0F); break
+                    case 0x70: string8Byte = this.x70.get(pCharCode & 0x0F); break
+                    //default: s8 = this.x70.get(15); break
                 }
-            else
-                switch (pCharCode) {
-                    case "Ä".charCodeAt(0) & 0xFF: s8 = this.x80.get(0); break
-                    case "Ö".charCodeAt(0) & 0xFF: s8 = this.x80.get(1); break
-                    case "Ü".charCodeAt(0) & 0xFF: s8 = this.x80.get(2); break
-                    case "ä".charCodeAt(0) & 0xFF: s8 = this.x80.get(3); break
-                    case "ö".charCodeAt(0) & 0xFF: s8 = this.x80.get(4); break
-                    case "ü".charCodeAt(0) & 0xFF: s8 = this.x80.get(5); break
-                    case "ß".charCodeAt(0) & 0xFF: s8 = this.x80.get(6); break
-                    case "€".charCodeAt(0) & 0xFF: s8 = this.x80.get(7); break
-                    case "°".charCodeAt(0) & 0xFF: s8 = this.x80.get(8); break
-                    default: s8 = this.x70.get(15); break
+                return Buffer.fromUTF8(string8Byte)
+            }
+            else {
+                let b: Buffer = Buffer.fromHex("FFFFFFFFFFFFFFFF")
+                //string8Byte = "FFFFFFFFFFFFFFFF"
+                let s = "ÄÖÜäöüß€°"
+                for (let j = 0; j < s.length; j++) {
+                    if ((s.charCodeAt(j)) == (pCharCode)) {
+                        //string8Byte = this.h80.get(j)
+                        b = this.b80.slice(j * 8, 8)
+                        break
+                    }
                 }
-            return Buffer.fromUTF8(s8)
+                return b
+                /* switch (pCharCode) {
+                    case "Ä".charCodeAt(0) & 0xFF: s8 = this.h80.get(0); break
+                    case "Ö".charCodeAt(0) & 0xFF: s8 = this.h80.get(1); break
+                    case "Ü".charCodeAt(0) & 0xFF: s8 = this.h80.get(2); break
+                    case "ä".charCodeAt(0) & 0xFF: s8 = this.h80.get(3); break
+                    case "ö".charCodeAt(0) & 0xFF: s8 = this.h80.get(4); break
+                    case "ü".charCodeAt(0) & 0xFF: s8 = this.h80.get(5); break
+                    case "ß".charCodeAt(0) & 0xFF: s8 = this.h80.get(6); break
+                    case "€".charCodeAt(0) & 0xFF: s8 = this.h80.get(7); break
+                    case "°".charCodeAt(0) & 0xFF: s8 = this.h80.get(8); break
+                    default: s8 = this.x70.get(15); break
+                } */
+                // return Buffer.fromHex(string8Byte)
+            }
         }
 
         constructor() {
@@ -237,6 +254,30 @@ namespace oled {
                 "\x00\x02\x01\x01\x02\x01\x00\x00", // "~"
                 "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF"  // 127
             ]
+            this.b80 = Buffer.fromHex(
+                "007D0A090A7D0000" + // "Ä"
+                "003D4241423D0000" + // "Ö"
+                "003D4040403D0000" + // "Ü"
+                "0021545455780000" + // "ä"
+                "0039444439000000" + // "ö"
+                "003D40407D000000" + // "ü"
+                "00FE094936000000" + // "ß"
+                "00143E5555551400" + // "€"
+                "0002050200000000"  // "°"
+            )
+            /* 
+            this.h80 = [
+                "007D0A090A7D0000", // "Ä"
+                "003D4241423D0000", // "Ö"
+                "003D4040403D0000", // "Ü"
+                "0021545455780000", // "ä"
+                "0039444439000000", // "ö"
+                "003D40407D000000", // "ü"
+                "00FE094936000000", // "ß"
+                "00143E5555551400", // "€"
+                "0002050200000000"  // "°"
+            ]
+
             this.x80 = [
                 "\x00\x7D\x0A\x09\x0A\x7D\x00\x00", // "Ä"
                 "\x00\x3D\x42\x41\x42\x3D\x00\x00", // "Ö"
@@ -247,7 +288,7 @@ namespace oled {
                 "\x00\xFE\x09\x49\x36\x00\x00\x00", // "ß"
                 "\x00\x14\x3E\x55\x55\x55\x14\x00", // "€"
                 "\x00\x02\x05\x02\x00\x00\x00\x00"  // "°"
-            ]
+            ] */
         } // constructor
     } // class oledarrays_8x8
 } // oledarrays.ts
