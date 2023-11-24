@@ -17,8 +17,7 @@
         "oledfunctions.ts"
     ],
     "testFiles": [
-        "test.ts",
-        "main.ts"
+        "test.ts"
     ],
     "targetVersions": {
         "target": "4.0.29",
