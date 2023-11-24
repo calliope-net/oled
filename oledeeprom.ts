@@ -37,7 +37,7 @@ neu programmiert von Lutz Elßner im November 2023
         constructor(pADDR = eADDR_EEPROM.EEPROM_x50, ck: boolean = true) {
             this.i2cADDR_EEPROM = (pADDR != undefined ? pADDR : eADDR_EEPROM.EEPROM_x50)
             this.i2cError_EEPROM = 0 // Reset Fehlercode
-            basic.showString("EE")
+            basic.showString("E")
         }
 
 
