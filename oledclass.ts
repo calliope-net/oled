@@ -51,6 +51,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
     // ========== class oledclass
 
     export class oledclass {
+        private readonly qSimulator: boolean = ("€".charCodeAt(0) == 8364)
         private readonly i2cADDR: eADDR_OLED
         private readonly i2cCheck: boolean // i2c-Check
         private i2cError: number = 0 // Fehlercode vom letzten WriteBuffer (0 ist kein Fehler)
@@ -67,7 +68,10 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
             this.i2cADDR = pADDR
             this.i2cCheck = ck
             this.i2cError = 0 // Reset Fehlercode
-            this.init(pInvert, pFlip)
+            if (this.qSimulator)
+                this.i2cCheck = false // Simulator
+            else
+                this.init(pInvert, pFlip)
         }
 
 
