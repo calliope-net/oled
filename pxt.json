@@ -17,7 +17,8 @@
         "oledfunctions.ts"
     ],
     "testFiles": [
-        "test.ts"
+        "test.ts",
+        "main.ts"
     ],
     "targetVersions": {
         "target": "4.0.29",
@@ -26,7 +27,7 @@
     "supportedTargets": [
         "calliopemini"
     ],
-    "preferredEditor": "blocksprj",
+    "preferredEditor": "tsprj",
     "yotta": {
         "config": {
             "microbit-dal": {
