@@ -528,10 +528,10 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
     // namespace oled
 
 
-    // ========== group="Text" advanced=true
+    // ========== group="Text // Kommentar" advanced=true
 
-    //% group="Text" advanced=true
-    //% block="kehre %pText um"
+    //% group="Text // Kommentar" advanced=true
+    //% block="kehre %pText um" weight=4
     //% pText.shadow="oled_text"
     export function kehreum(pText: any): string {
         let text: string = convertToText(pText)
@@ -540,5 +540,11 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
             r = text.charAt(j) + r
         return r
     }
+
+    //% group="Text // Kommentar" advanced=true
+    //% block="// %text" weight=2
+    export function comment(text: string): void { }
+
+
 
 } // oledclass.ts
