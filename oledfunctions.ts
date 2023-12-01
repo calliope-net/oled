@@ -72,6 +72,17 @@ namespace oled
 
     export enum eSegment { A, B, C, D, E, F, G } // 7-Segment-Anzeige
 
+    export enum ei2cError { OLED, EEPROM }
+
+    export enum eDisplayFormat {
+        //% block="16x8"
+        x16x8,
+        //% block="8x16"
+        x8x16,
+        //% block="25x8"
+        x25x8
+    }
+
 
     export function between(i0: number, i1: number, i2: number): boolean { return (i0 >= i1 && i0 <= i2) }
 
