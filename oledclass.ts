@@ -458,17 +458,18 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% vonZeile.min=0 vonZeile.max=15
         textArray(pDisplayFormat: eDisplayFormat, pArray: any[], vonZeile: number) {
             if (pArray != undefined && pArray.length > 0) {
-                basic.showNumber(pArray.length)
                 if (pDisplayFormat == eDisplayFormat.x16x8 && between(vonZeile, 0, 7)) {
                     for (let j = 0; vonZeile + j < 8 && j < pArray.length; j++)
                         this.writeText16x8(vonZeile + j, 0, 15, pArray[j])
                 }
                 else if (pDisplayFormat == eDisplayFormat.x8x16 && between(vonZeile, 0, 15)) {
-                    for (let j = 0; vonZeile + j < 16 && j < pArray.length; j++) 
-                        this.writeText8x16(vonZeile + j, 0, 15, pArray[j])
+                    for (let j = 0; vonZeile + j < 16 && j < pArray.length; j++) {
+                        //basic.showString(pArray[j]) pArray[j]
+                        this.writeText8x16(vonZeile + j, 0, 7, pArray[j])
+                    }
                 }
                 else if (pDisplayFormat == eDisplayFormat.x25x8 && between(vonZeile, 0, 7)) {
-                    for (let j = 0; vonZeile + j < 8 && j < pArray.length; j++) 
+                    for (let j = 0; vonZeile + j < 8 && j < pArray.length; j++)
                         this.writeText25x8(vonZeile + j, 0, 24, pArray[j])
                 }
             } else {
