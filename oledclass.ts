@@ -483,7 +483,16 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         //% block="Display %OLEDtext %pDisplayFormat z_Text %pText" weight=6
         //% pText.shadow="oled_text"
         textZeile(pDisplayFormat: eDisplayFormat, pText: any) {
-
+            let text = convertToText(pText)
+            if (text.length >= 3) {
+                let row = parseInt(text.substr(0, 2)) // erste 2 Zeichen in Zahl umwandeln = Zeilennummer
+                if (pDisplayFormat == eDisplayFormat.x16x8 && between(row, 0, 7))
+                    this.writeText16x8(row, 0, 15, text.substr(2))
+                else if (pDisplayFormat == eDisplayFormat.x8x16 && between(row, 0, 15))
+                    this.writeText8x16(row, 0, 7, text.substr(2))
+                else if (pDisplayFormat == eDisplayFormat.x25x8 && between(row, 0, 7))
+                    this.writeText25x8(row, 0, 24, text.substr(2))
+            }
         }
 
         // ========== private
