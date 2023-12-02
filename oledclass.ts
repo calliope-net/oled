@@ -479,6 +479,12 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
         }
 
+        //% group="Text mit Zeilennummer am Anfang anzeigen" subcategory=Text
+        //% block="Display %OLEDtext %pDisplayFormat z_Text %pText" weight=6
+        //% pText.shadow="oled_text"
+        textZeile(pDisplayFormat: eDisplayFormat, pText: any) {
+
+        }
 
         // ========== private
 
@@ -562,24 +568,24 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
     // namespace oled
 
-/* 
-    // ========== group="Text // Kommentar" advanced=true
-
-    //% group="Text // Kommentar" advanced=true
-    //% block="kehre %pText um" weight=4
-    //% pText.shadow="oled_text"
-    export function kehreum(pText: any): string {
-        let text: string = convertToText(pText)
-        let r: string = ""
-        for (let j = 0; j < text.length; j++)
-            r = text.charAt(j) + r
-        return r
-    }
-
-    //% group="Text // Kommentar" advanced=true
-    //% block="// %text" weight=2
-    export function comment(text: string): void { }
- */
+    /* 
+        // ========== group="Text // Kommentar" advanced=true
+    
+        //% group="Text // Kommentar" advanced=true
+        //% block="kehre %pText um" weight=4
+        //% pText.shadow="oled_text"
+        export function kehreum(pText: any): string {
+            let text: string = convertToText(pText)
+            let r: string = ""
+            for (let j = 0; j < text.length; j++)
+                r = text.charAt(j) + r
+            return r
+        }
+    
+        //% group="Text // Kommentar" advanced=true
+        //% block="// %text" weight=2
+        export function comment(text: string): void { }
+     */
 
 
 } // oledclass.ts
