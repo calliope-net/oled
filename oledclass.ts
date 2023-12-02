@@ -451,9 +451,9 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
         geti2cError_EEPROM() { return this.qOLEDeeprom.i2cError_EEPROM }
 
 
-        // ========== group="Text // Kommentar" advanced=true
+        // ========== group="mehrere Zeilen aus Array anzeigen" subcategory=Text
 
-        //% group="Text // Kommentar" advanced=true
+        //% group="mehrere Zeilen aus Array anzeigen" subcategory=Text
         //% block="Display %OLEDtext %pDisplayFormat Array %pArray ab Zeile %vonZeile" weight=6
         //% vonZeile.min=0 vonZeile.max=15
         textArray(pDisplayFormat: eDisplayFormat, pArray: any[], vonZeile: number) {
@@ -462,13 +462,6 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
             else if (pArray.length == 0)
                 pArray = ["length=0"]
 
-            /* if (pArray != undefined && pArray.length > 0) {
-               
-            } else {
-                pArray = ["undefined"]
-                //basic.showString("u")
-               
-            } */
             if (pDisplayFormat == eDisplayFormat.x16x8 && between(vonZeile, 0, 7)) {
                 for (let j = 0; vonZeile + j < 8 && j < pArray.length; j++)
                     this.writeText16x8(vonZeile + j, 0, 15, pArray[j])
@@ -569,7 +562,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
 
     // namespace oled
 
-
+/* 
     // ========== group="Text // Kommentar" advanced=true
 
     //% group="Text // Kommentar" advanced=true
@@ -586,7 +579,7 @@ Objektvariablen und Zeichensatz aus Arrays von calliope-net/oled-eeprom im Novem
     //% group="Text // Kommentar" advanced=true
     //% block="// %text" weight=2
     export function comment(text: string): void { }
-
+ */
 
 
 } // oledclass.ts

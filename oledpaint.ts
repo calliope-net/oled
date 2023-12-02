@@ -38,11 +38,11 @@ neu programmiert von Lutz Elßner im November 2023
 
 
 
-        // ========== subcategory=zeichnen ==========
+        // ========== subcategory=Grafik ==========
 
-        // ========== group="direkt auf Display zeichnen" subcategory=zeichnen
+        // ========== group="direkt auf Display zeichnen" subcategory=Grafik
 
-        //% group="direkt auf Display zeichnen" subcategory=zeichnen
+        //% group="direkt auf Display zeichnen" subcategory=Grafik
         //% block="Display %OLEDpaint löschen || von Zeile %vonZeile bis Zeile %bisZeile mit Bitmuster 0↓255 %byte" weight=9
         //% vonZeile.min=0 vonZeile.max=7 vonZeile.defl=0
         //% bisZeile.min=0 bisZeile.max=7 bisZeile.defl=7
@@ -52,7 +52,7 @@ neu programmiert von Lutz Elßner im November 2023
         }
 
 
-        //% group="direkt auf Display zeichnen" subcategory=zeichnen
+        //% group="direkt auf Display zeichnen" subcategory=Grafik
         //% block="Display %OLEDpaint 7-Segment Zahl anzeigen %num" weight=6
         //% num.min=0 num.max=9999 
         zeigeZahl(num: number) {
@@ -80,7 +80,7 @@ neu programmiert von Lutz Elßner im November 2023
         }
 
 
-        //% group="direkt auf Display zeichnen" subcategory=zeichnen
+        //% group="direkt auf Display zeichnen" subcategory=Grafik
         //% block="Display %OLEDpaint Buffer anzeigen" weight=4
         sendBuffer() {
             let bu: Buffer, offset: number
@@ -95,10 +95,10 @@ neu programmiert von Lutz Elßner im November 2023
 
 
 
-        // ========== group="in den Buffer zeichnen (dann 'Buffer anzeigen' verwenden)" subcategory=zeichnen
+        // ========== group="in den Buffer zeichnen (dann 'Buffer anzeigen' verwenden)" subcategory=Grafik
 
 
-        //% group="in den Buffer zeichnen (dann 'Buffer anzeigen' verwenden)" subcategory=zeichnen
+        //% group="in den Buffer zeichnen (dann 'Buffer anzeigen' verwenden)" subcategory=Grafik
         //% block="Buffer %OLEDpaint löschen || von Zeile %vonZeile bis Zeile %bisZeile mit Bitmuster 0↓255 %byte" weight=9
         //% vonZeile.min=0 vonZeile.max=7 vonZeile.defl=0
         //% bisZeile.min=0 bisZeile.max=7 bisZeile.defl=7
@@ -109,7 +109,7 @@ neu programmiert von Lutz Elßner im November 2023
         }
 
 
-        //% group="in den Buffer zeichnen (dann 'Buffer anzeigen' verwenden)" subcategory=zeichnen
+        //% group="in den Buffer zeichnen (dann 'Buffer anzeigen' verwenden)" subcategory=Grafik
         //% block="Buffer %OLEDpaint 7-Segment Ziffer %num an Position (0-3) %pos" weight=8
         //% num.min=0 num.max=9 pos.min=0 pos.max=3
         drawnum(num: number, pos: number) {
@@ -218,7 +218,7 @@ neu programmiert von Lutz Elßner im November 2023
         }
 
 
-        //% group="in den Buffer zeichnen (dann 'Buffer anzeigen' verwenden)" subcategory=zeichnen
+        //% group="in den Buffer zeichnen (dann 'Buffer anzeigen' verwenden)" subcategory=Grafik
         //% block="Buffer %OLEDpaint ein Segment %seg an Position (0-96) %pos" weight=7
         //% pos.min=0 pos.max=96
         drawsegment(seg: eSegment, pos: number) {
@@ -235,9 +235,9 @@ neu programmiert von Lutz Elßner im November 2023
 
 
 
-        // ========== group="1 Byte (8 Pixel) in den Buffer zeichnen / lesen" subcategory=zeichnen
+        // ========== group="1 Byte (8 Pixel) in den Buffer zeichnen / lesen" subcategory=Grafik
 
-        //% group="1 Byte (8 Pixel) in den Buffer zeichnen / lesen" subcategory=zeichnen
+        //% group="1 Byte (8 Pixel) in den Buffer zeichnen / lesen" subcategory=Grafik
         //% block="Buffer %OLEDpaint Zeile 0↓7 %page Segment 0→127 %seg Bitmuster 0↓255 %byte" weight=4
         //% page.min=0 page.max=7 page.defl=0
         //% seg.min=0 seg.max=127 seg.defl=0
@@ -248,7 +248,7 @@ neu programmiert von Lutz Elßner im November 2023
             }
         }
 
-        //% group="1 Byte (8 Pixel) in den Buffer zeichnen / lesen" subcategory=zeichnen
+        //% group="1 Byte (8 Pixel) in den Buffer zeichnen / lesen" subcategory=Grafik
         //% block="Buffer %OLEDpaint Zeile 0↓7 %page Segment 0→127 %seg Byte lesen" weight=2
         //% page.min=0 page.max=7 page.defl=0
         //% seg.min=0 seg.max=127 seg.defl=0
@@ -261,9 +261,9 @@ neu programmiert von Lutz Elßner im November 2023
 
 
 
-        // ========== group="1 Pixel in den Buffer zeichnen / lesen" subcategory=zeichnen
+        // ========== group="1 Pixel in den Buffer zeichnen / lesen" subcategory=Grafik
 
-        //% group="1 Pixel in den Buffer zeichnen / lesen" subcategory=zeichnen
+        //% group="1 Pixel in den Buffer zeichnen / lesen" subcategory=Grafik
         //% block="Buffer %OLEDpaint Pixel an x 0→127 %x y 0↓63 %y" weight=1
         //% x.min=0, x.max=127 y.min=0, y.max=63
         setPixel(x: number, y: number) {
