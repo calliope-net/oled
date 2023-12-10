@@ -39,8 +39,8 @@ neu programmiert von Lutz Elßner im November 2023
         const im = <Image><any>i;
         return im
     }
-
-    export let quer = matrix22x6(`
+/* 
+     let quer = matrix22x6(`
         . . # # # # # # # # # # # # # # # # # # . .
         . # # # # # # # # # # # # # # # # # # # # .
         # # # # # # # # # # # # # # # # # # # # # #
@@ -49,7 +49,7 @@ neu programmiert von Lutz Elßner im November 2023
         . . # # # # # # # # # # # # # # # # # # . .
         `)
 
-    export let hoch = matrix6x24(`
+     let hoch = matrix6x24(`
     . . # # . .
     . # # # # .
     # # # # # #
@@ -74,6 +74,6 @@ neu programmiert von Lutz Elßner im November 2023
     . # # # # .
     . . # # . .
     `)
-
+ */
 
 } // oledimage.ts

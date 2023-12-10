@@ -222,6 +222,44 @@ neu programmiert von Lutz Elßner im November 2023
         //% block="Buffer %OLEDpaint ein Segment %seg an Position (0-96) %pos" weight=7
         //% pos.min=0 pos.max=96
         drawsegment(seg: eSegment, pos: number) {
+
+            let quer = matrix22x6(`
+        . . # # # # # # # # # # # # # # # # # # . .
+        . # # # # # # # # # # # # # # # # # # # # .
+        # # # # # # # # # # # # # # # # # # # # # #
+        # # # # # # # # # # # # # # # # # # # # # #
+        . # # # # # # # # # # # # # # # # # # # # .
+        . . # # # # # # # # # # # # # # # # # # . .
+        `)
+
+            let hoch = matrix6x24(`
+    . . # # . .
+    . # # # # .
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    # # # # # #
+    . # # # # .
+    . . # # . .
+    `)
+
+
+
             switch (seg) {
                 case eSegment.A: { this.writeImageOLED(quer, pos + 4, 0); break }
                 case eSegment.F: { this.writeImageOLED(hoch, pos, 4); break }
