@@ -1,6 +1,6 @@
 {
     "name": "oled",
-    "version": "0.0.4",
+    "version": "0.1.0",
     "description": "Calliope i2c Erweiterung für OLED Displays",
     "dependencies": {
         "core": "*"
