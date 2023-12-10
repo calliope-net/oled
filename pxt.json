@@ -1,7 +1,7 @@
 {
     "name": "oled",
     "version": "0.0.4",
-    "description": "",
+    "description": "Calliope i2c Erweiterung für OLED Displays",
     "dependencies": {
         "core": "*"
     },
@@ -16,9 +16,6 @@
         "oledeeprom.ts",
         "oledfunctions.ts",
         "oledtext.ts"
-    ],
-    "testFiles": [
-        "test.ts"
     ],
     "targetVersions": {
         "target": "4.0.29",
